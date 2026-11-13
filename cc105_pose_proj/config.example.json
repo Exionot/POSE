@@ -1,0 +1,12 @@
+{
+    "connection": {
+        "host": "localhost",
+        "database": "pose_db",
+        "user": "root",
+        "password": "YOUR_PASSWORD"
+    },
+
+    "settings": {
+        "currency": "₱"
+    }
+}
