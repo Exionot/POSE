@@ -22,12 +22,12 @@ namespace cc105_pose_proj.Services
             if (currentBusinessId == null)
                 return allProducts;
 
-            return allProducts.Where(p => p.Id == currentBusinessId.Value).ToList();
+            return allProducts.Where(p => p.Business.Id == currentBusinessId.Value).ToList();
         }
 
         public Product? GetProductById(int id)
         {
-            Product? product = _productRepo.GetById(id);
+            var product = _productRepo.GetById(id);
 
             if (product == null) 
                 return null;
@@ -78,7 +78,6 @@ namespace cc105_pose_proj.Services
                 product.Image = ImgUtil.ReplaceImage(product.Image, newImagePath);
             }
 
-            product.Updated = DateTime.Now;
             return _productRepo.Update(product);
         }
 

@@ -9,7 +9,7 @@ namespace cc105_pose_proj.Data
         private readonly string BaseSelectQuery = $@"
             select
                 d.id as discount_id,
-                d.name as discount_name,
+                d.name as discount_name,    
                 d.value as value,
                 d.type as type,
                 d.buy_quantity as buy_quantity,
@@ -45,7 +45,7 @@ namespace cc105_pose_proj.Data
             using var conn = DbConnector.GetConnection();
             conn.Open();
 
-            string query = $"{BaseSelectQuery} where discount_id = @id limit 1";
+            string query = $"{BaseSelectQuery} where d.id = @id limit 1";
             using var cmd = new MySqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@id", id);
 
@@ -62,24 +62,48 @@ namespace cc105_pose_proj.Data
             using var conn = DbConnector.GetConnection();
             conn.Open();
 
-            string query = @"
-                insert into discounts(
-                    name, type, value, buy_quantity, get_quantity, 
-                    is_active, created_by)
-                values(
-                    @name, @type, @value, @buy_quantity, @get_quantity,
-                    @is_active, @created_by)
-            ";
-            using var cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@name", entity.Name);
-            cmd.Parameters.AddWithValue("@type", entity.Type);
-            cmd.Parameters.AddWithValue("@value", entity.Value);
-            cmd.Parameters.AddWithValue("@buy_quantity", entity.BuyAmount);
-            cmd.Parameters.AddWithValue("@get_quantity", entity.GetAmount);
-            cmd.Parameters.AddWithValue("@is_active", entity.Active);
-            cmd.Parameters.AddWithValue("@created_by", entity.CreatedBy.Id);
+            using var transaction = conn.BeginTransaction();
+            try
+            {
+                string query = @"
+                    insert into discounts(
+                        name, type, value, buy_quantity, get_quantity, 
+                        is_active, created_by)
+                    values(
+                        @name, @type, @value, @buy_quantity, @get_quantity,
+                        @is_active, @created_by)
+                ";
+                using var cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@name", entity.Name);
+                cmd.Parameters.AddWithValue("@type", entity.Type);
+                cmd.Parameters.AddWithValue("@value", entity.Value);
+                cmd.Parameters.AddWithValue("@buy_quantity", entity.BuyAmount);
+                cmd.Parameters.AddWithValue("@get_quantity", entity.GetAmount);
+                cmd.Parameters.AddWithValue("@is_active", entity.Active);
+                cmd.Parameters.AddWithValue("@created_by", entity.CreatedBy.Id);
 
-            return cmd.ExecuteNonQuery() > 0;
+                if (cmd.ExecuteNonQuery() <= 0)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+                int newDiscountId = (int)cmd.LastInsertedId;
+
+                if (!InsertItems(newDiscountId, entity.EligibleItems, conn, transaction))
+                {
+                    transaction.Rollback();
+                    return false;
+                }
+
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         public bool Update(Discount entity)
@@ -116,11 +140,6 @@ namespace cc105_pose_proj.Data
                 {
                     transaction.Rollback();
                     return false;
-                }
-
-                if (entity.EligibleItems == null)
-                {
-                    throw new ArgumentException("EligibleItems cannot be null");
                 }
 
                 string deleteQuery = "delete from discount_items where discount_id = @id";
@@ -172,10 +191,7 @@ namespace cc105_pose_proj.Data
                 discountIdParam.Value = discountId;
                 productIdParam.Value = item.Id;
                 if (itemCmd.ExecuteNonQuery() <= 0)
-                {
-                    transaction.Rollback();
                     return false;
-                }
             }
 
             return true;
@@ -219,8 +235,8 @@ namespace cc105_pose_proj.Data
                 Name = reader.GetString("discount_name"),
                 Type = type,
                 Value = reader.GetDecimal("value"),
-                BuyAmount = reader.GetInt32("buy_amount"),
-                GetAmount = reader.GetInt32("get_amount"),
+                BuyAmount = reader.GetInt32("buy_quantity"),
+                GetAmount = reader.GetInt32("get_quantity"),
                 Active = reader.GetBoolean("is_active"),
                 CreatedBy = business,
                 CreatedAt = reader.GetDateTime("created_at"),
