@@ -1,23 +1,16 @@
-﻿using cc105_pose_proj.Models;
+﻿using cc105_pose_proj.Data.Mappers;
+using cc105_pose_proj.Models;
 using MySql.Data.MySqlClient;
 
 namespace cc105_pose_proj.Data
 {
     public class ProductRepository : IRepository<Product>
     {
-        private string BaseSelectQuery = @"
-            select 
-                p.id as product_id,
-                p.name as product_name,
-                p.quantity as quantity,
-                p.price as price,
-                p.image as image,
-                p.created_at as created_at,
-                p.updated_at as updated_at,
-                b.id as business_id,
-                b.name as business_name
-            from products as p inner join business as b
-            on p.business_id = b.id
+        private string BaseSelectQuery = $@"
+            select {ProductMapper.Columns}
+            from products as p 
+            inner join business as pb
+            on p.business_id = pb.id
         ";
 
         public List<Product> GetAll()
@@ -31,7 +24,7 @@ namespace cc105_pose_proj.Data
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                list.Add(CreateProduct(reader));
+                list.Add(ProductMapper.CreateProduct(reader));
             }
 
             return list;
@@ -51,7 +44,7 @@ namespace cc105_pose_proj.Data
             if (!reader.Read())
                 return null;
 
-            return CreateProduct(reader);
+            return ProductMapper.CreateProduct(reader);
         }
 
         public bool Add(Product entity)
@@ -85,6 +78,7 @@ namespace cc105_pose_proj.Data
                     price = @price,
                     business_id = @business_id,
                     image = @image
+                    updated_at = @updated_at
                 where id = @id";
             using var cmd = new MySqlCommand(query, conn);
 
@@ -93,6 +87,7 @@ namespace cc105_pose_proj.Data
             cmd.Parameters.AddWithValue("@price", entity.Price);
             cmd.Parameters.AddWithValue("@business_id", entity.Business.Id);
             cmd.Parameters.AddWithValue("@image", entity.Image);
+            cmd.Parameters.AddWithValue("@updated_at", entity.Updated);
             cmd.Parameters.AddWithValue("@id", entity.Id);
 
             return cmd.ExecuteNonQuery() > 0;
@@ -108,27 +103,6 @@ namespace cc105_pose_proj.Data
             cmd.Parameters.AddWithValue("@id", id);
 
             return cmd.ExecuteNonQuery() > 0;
-        }
-
-        private static Product CreateProduct(MySqlDataReader reader)
-        {
-            var business = new Business
-            {
-                Id = reader.GetInt32("business_id"),
-                Name = reader.GetString("business_name")
-            };
-
-            return new Product 
-            {
-                Id = reader.GetInt32("product_id"),
-                Name = reader.GetString("product_name"),
-                Quantity = reader.GetInt32("quantity"),
-                Price = reader.GetDecimal("price"),
-                Business = business,
-                Image = reader.GetString("image"),
-                Created = reader.GetDateTime("created_at"),
-                Updated = reader.GetDateTime("updated_at")
-            };
         }
     }
 }

@@ -76,7 +76,7 @@ namespace cc105_pose_proj.Data
                 {
                     long newUserId = cmd.LastInsertedId;
 
-                    const string linkQuery = "UPDATE business SET user_id = @user_id WHERE id = @business_id";
+                    string linkQuery = "update business set user_id = @user_id where id = @business_id";
                     using var linkCmd = new MySqlCommand(linkQuery, conn);
                     linkCmd.Parameters.AddWithValue("@user_id", newUserId);
                     linkCmd.Parameters.AddWithValue("@business_id", entity.Business.Id);
@@ -123,7 +123,7 @@ namespace cc105_pose_proj.Data
 
                 if (entity.Business != null)
                 {
-                    const string linkQuery = "UPDATE business SET user_id = @user_id WHERE id = @business_id";
+                    string linkQuery = "update business set user_id = @user_id where id = @business_id";
                     using var linkCmd = new MySqlCommand(linkQuery, conn);
                     linkCmd.Parameters.AddWithValue("@user_id", entity.Id);
                     linkCmd.Parameters.AddWithValue("@business_id", entity.Business.Id);

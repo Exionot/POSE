@@ -6,7 +6,7 @@
         {
             Percentage,
             Fixed,
-            BuyXGetY
+            Buy_X_Get_Y
         }
         public int Id { get; init; }
         public required string Name { get; set; }
@@ -18,7 +18,7 @@
         public required Business CreatedBy { get; init; }
         public DateTime CreatedAt { get; init; }
         public DateTime UpdatedAt { get; set; }
-        public List<Product> Items { get; set; } = [];
+        public List<Product> EligibleItems { get; set; } = [];
     }
 
     
