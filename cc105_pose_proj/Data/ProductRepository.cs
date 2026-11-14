@@ -78,7 +78,7 @@ namespace cc105_pose_proj.Data
                     price = @price,
                     business_id = @business_id,
                     image = @image
-                    updated_at = @updated_at
+                    updated_at = now()
                 where id = @id";
             using var cmd = new MySqlCommand(query, conn);
 
@@ -87,7 +87,6 @@ namespace cc105_pose_proj.Data
             cmd.Parameters.AddWithValue("@price", entity.Price);
             cmd.Parameters.AddWithValue("@business_id", entity.Business.Id);
             cmd.Parameters.AddWithValue("@image", entity.Image);
-            cmd.Parameters.AddWithValue("@updated_at", entity.Updated);
             cmd.Parameters.AddWithValue("@id", entity.Id);
 
             return cmd.ExecuteNonQuery() > 0;

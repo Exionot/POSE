@@ -99,7 +99,7 @@ namespace cc105_pose_proj.Data
                         buy_quantity = @buy_quantity,
                         get_quantity = @get_quantity,
                         is_active = @is_active,
-                        updated_at = @updated_at
+                        updated_at = now()
                     where id = @id
                 ";
                 using var cmd = new MySqlCommand(query, conn, transaction);
@@ -109,7 +109,6 @@ namespace cc105_pose_proj.Data
                 cmd.Parameters.AddWithValue("@buy_quantity", entity.BuyAmount);
                 cmd.Parameters.AddWithValue("@get_quantity", entity.GetAmount);
                 cmd.Parameters.AddWithValue("@is_active", entity.Active);
-                cmd.Parameters.AddWithValue("@updated_at", entity.UpdatedAt);
                 cmd.Parameters.AddWithValue("@id", entity.Id);
 
                 int rows = cmd.ExecuteNonQuery();
