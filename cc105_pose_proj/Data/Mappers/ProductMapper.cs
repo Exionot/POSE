@@ -11,8 +11,8 @@ namespace cc105_pose_proj.Data.Mappers
             p.quantity as quantity,
             p.price as price,
             p.image as image,
-            p.created_at as created_at,
-            p.updated_at as updated_at,
+            p.created_at as product_created_at,
+            p.updated_at as product_updated_at,
             pb.id as product_business_id,
             pb.name as product_business_name
         ";

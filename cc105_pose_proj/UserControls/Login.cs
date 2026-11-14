@@ -61,7 +61,7 @@ namespace cc105_pose_proj
             string caption = "Log In";
             bool loginSuccess = AuthService.Login(usernameField.Text, passwordField.Text);
 
-            if (loginSuccess)
+            if (!loginSuccess)
             {
                 MessageBox.Show(
                     "Incorrect credentials.",
