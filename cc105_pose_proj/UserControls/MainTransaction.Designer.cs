@@ -132,7 +132,7 @@
             transactionGrid.Size = new Size(654, 398);
             transactionGrid.StateCommon.Background.Color1 = SystemColors.ControlDark;
             transactionGrid.StateCommon.BackStyle = Krypton.Toolkit.PaletteBackStyle.GridBackgroundList;
-            transactionGrid.StateCommon.DataCell.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            transactionGrid.StateCommon.DataCell.Content.Font = new Font("Inter", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             transactionGrid.StateCommon.HeaderColumn.Back.Color1 = Color.Goldenrod;
             transactionGrid.StateCommon.HeaderColumn.Back.Color2 = Color.Goldenrod;
             transactionGrid.StateCommon.HeaderColumn.Content.Color1 = SystemColors.Control;
@@ -178,10 +178,10 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Inter", 12F);
+            label3.Font = new Font("Inter", 14.25F);
             label3.Location = new Point(24, 19);
             label3.Name = "label3";
-            label3.Size = new Size(77, 23);
+            label3.Size = new Size(91, 27);
             label3.TabIndex = 3;
             label3.Text = "Subtotal:";
             // 
@@ -189,10 +189,10 @@
             // 
             subTotalLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             subTotalLabel.AutoSize = true;
-            subTotalLabel.Font = new Font("Inter", 12F);
+            subTotalLabel.Font = new Font("Inter", 14.25F);
             subTotalLabel.Location = new Point(206, 17);
             subTotalLabel.Name = "subTotalLabel";
-            subTotalLabel.Size = new Size(56, 23);
+            subTotalLabel.Size = new Size(68, 27);
             subTotalLabel.TabIndex = 2;
             subTotalLabel.Text = "label2";
             subTotalLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -211,10 +211,10 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Inter", 12F);
+            label2.Font = new Font("Inter", 14.25F);
             label2.Location = new Point(11, 25);
             label2.Name = "label2";
-            label2.Size = new Size(104, 23);
+            label2.Size = new Size(123, 27);
             label2.TabIndex = 2;
             label2.Text = "Total Saved:";
             // 
@@ -222,10 +222,10 @@
             // 
             discountLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             discountLabel.AutoSize = true;
-            discountLabel.Font = new Font("Inter", 12F);
+            discountLabel.Font = new Font("Inter", 14.25F);
             discountLabel.Location = new Point(209, 17);
             discountLabel.Name = "discountLabel";
-            discountLabel.Size = new Size(53, 23);
+            discountLabel.Size = new Size(64, 27);
             discountLabel.TabIndex = 1;
             discountLabel.Text = "label1";
             discountLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -244,10 +244,10 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Inter", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new Font("Inter", 18F, FontStyle.Bold);
             label1.Location = new Point(16, 12);
             label1.Name = "label1";
-            label1.Size = new Size(71, 30);
+            label1.Size = new Size(82, 35);
             label1.TabIndex = 1;
             label1.Text = "Total:";
             // 
@@ -255,10 +255,10 @@
             // 
             totalLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             totalLabel.AutoSize = true;
-            totalLabel.Font = new Font("Inter", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            totalLabel.Font = new Font("Inter", 18F, FontStyle.Bold);
             totalLabel.Location = new Point(108, 12);
             totalLabel.Name = "totalLabel";
-            totalLabel.Size = new Size(155, 30);
+            totalLabel.Size = new Size(178, 35);
             totalLabel.TabIndex = 0;
             totalLabel.Text = "label1jhgjhgjg";
             totalLabel.TextAlign = ContentAlignment.MiddleRight;
@@ -279,17 +279,17 @@
             flowLayoutPanel1.Controls.Add(removeOneBtn);
             flowLayoutPanel1.Controls.Add(removeAllBtn);
             flowLayoutPanel1.Controls.Add(clearTableBtn);
-            flowLayoutPanel1.Dock = DockStyle.Right;
+            flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(167, 0);
+            flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(0, 0, 30, 0);
-            flowLayoutPanel1.Size = new Size(190, 217);
+            flowLayoutPanel1.Size = new Size(357, 217);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // removeOneBtn
             // 
-            removeOneBtn.Location = new Point(5, 5);
+            removeOneBtn.Location = new Point(172, 5);
             removeOneBtn.Margin = new Padding(5);
             removeOneBtn.Name = "removeOneBtn";
             removeOneBtn.OverrideDefault.Back.Color1 = Color.Brown;
@@ -300,7 +300,7 @@
             removeOneBtn.StateCommon.Back.Color2 = Color.Brown;
             removeOneBtn.StateCommon.Border.Rounding = 5F;
             removeOneBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            removeOneBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9.75F, FontStyle.Bold);
+            removeOneBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 14.25F, FontStyle.Bold);
             removeOneBtn.TabIndex = 0;
             removeOneBtn.Values.DropDownArrowColor = Color.Empty;
             removeOneBtn.Values.Text = "Remove One";
@@ -308,7 +308,7 @@
             // 
             // removeAllBtn
             // 
-            removeAllBtn.Location = new Point(5, 65);
+            removeAllBtn.Location = new Point(12, 5);
             removeAllBtn.Margin = new Padding(5);
             removeAllBtn.Name = "removeAllBtn";
             removeAllBtn.OverrideDefault.Back.Color1 = Color.Brown;
@@ -319,7 +319,7 @@
             removeAllBtn.StateCommon.Back.Color2 = Color.Brown;
             removeAllBtn.StateCommon.Border.Rounding = 5F;
             removeAllBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            removeAllBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9.75F, FontStyle.Bold);
+            removeAllBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 14.25F, FontStyle.Bold);
             removeAllBtn.TabIndex = 1;
             removeAllBtn.Values.DropDownArrowColor = Color.Empty;
             removeAllBtn.Values.Text = "Remove All";
@@ -327,7 +327,7 @@
             // 
             // clearTableBtn
             // 
-            clearTableBtn.Location = new Point(5, 125);
+            clearTableBtn.Location = new Point(172, 65);
             clearTableBtn.Margin = new Padding(5);
             clearTableBtn.Name = "clearTableBtn";
             clearTableBtn.OverrideDefault.Back.Color1 = Color.Brown;
@@ -338,7 +338,7 @@
             clearTableBtn.StateCommon.Back.Color2 = Color.Brown;
             clearTableBtn.StateCommon.Border.Rounding = 5F;
             clearTableBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            clearTableBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9.75F, FontStyle.Bold);
+            clearTableBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 14.25F, FontStyle.Bold);
             clearTableBtn.TabIndex = 2;
             clearTableBtn.Values.DropDownArrowColor = Color.Empty;
             clearTableBtn.Values.Text = "Clear Table";
