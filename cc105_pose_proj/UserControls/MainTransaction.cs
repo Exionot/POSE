@@ -1,19 +1,28 @@
 ﻿using cc105_pose_proj.Models;
+using cc105_pose_proj.Navigation;
+using cc105_pose_proj.Services;
 using cc105_pose_proj.UserControls;
 using cc105_pose_proj.Util;
-using cc105_pose_proj.Navigation;
 using System.Data;
-using cc105_pose_proj.Data;
+using System.Windows.Forms;
+using static cc105_pose_proj.Services.PricingService;
 
 namespace cc105_pose_proj
 {
     public partial class MainTransaction : UserControl
     {
         private readonly INavigator _nav;
-        private readonly IRepository<Product> _productRepo = new ProductRepository();
+        private readonly ProductService _productService = new();
+        private readonly PricingService _pricingService = new();
+        private readonly DiscountService _discountService = new(null);
+
+        private List<Discount> _activeDiscounts = [];
+        private readonly List<CartItem> _cart = [];
+
         private readonly DataTable _items = new();
-        private readonly Dictionary<String, Button> _productButtons = [];
-        private readonly Dictionary<String, Product> _products = [];
+        private readonly Dictionary<string, Button> _productButtons = [];
+        private readonly Dictionary<string, Product> _products = [];
+
         public MainTransaction(INavigator nav)
         {
             _nav = nav;
@@ -22,31 +31,39 @@ namespace cc105_pose_proj
             _items.Columns.Add("Name", typeof(string));
             _items.Columns.Add("Price", typeof(decimal));
             _items.Columns.Add("Qty", typeof(int));
-            _items.Columns.Add("Total", typeof(decimal), "Price * Qty");
+            _items.Columns.Add("Discount", typeof(string));
+            _items.Columns.Add("Total", typeof(decimal));
+
             transactionGrid.DataSource = _items;
             transactionGrid.Columns["Price"]!.DefaultCellStyle.Format = "C2";
             transactionGrid.Columns["Total"]!.DefaultCellStyle.Format = "C2";
             transactionGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            float namePercent = 65f;
-            float otherPercent = (100 - namePercent) / 3;
-            transactionGrid.Columns["Name"]!.FillWeight = namePercent;
-            transactionGrid.Columns["Price"]!.FillWeight = otherPercent;
-            transactionGrid.Columns["Qty"]!.FillWeight = otherPercent;
-            transactionGrid.Columns["Total"]!.FillWeight = otherPercent;
+            transactionGrid.Columns["Name"]!.FillWeight = 38f;
+            transactionGrid.Columns["Price"]!.FillWeight = 16f;
+            transactionGrid.Columns["Qty"]!.FillWeight = 12f;
+            transactionGrid.Columns["Discount"]!.FillWeight = 18f;
+            transactionGrid.Columns["Total"]!.FillWeight = 16f;
 
-            updateTotal();
+            UpdateSaleSummary();
         }
 
         private void MainTransaction_Load(object sender, EventArgs e)
         {
-            List<Product> productList = _productRepo.GetAll();
+            _activeDiscounts = _discountService.GetDiscounts()
+                .Where(d => d.Active)
+                .ToList();
+
+            List<Product> productList = _productService.GetProducts();
 
             productButtonPanel.Controls.Clear();
+            _productButtons.Clear();
+            _products.Clear();
+
             foreach (Product p in productList)
             {
                 string name = p.Name;
-                if (_products.ContainsKey(Name))
+                if (_products.ContainsKey(name))
                     continue;
 
                 Button btn = new();
@@ -60,12 +77,14 @@ namespace cc105_pose_proj
                 }
 
                 btn.Enabled = p.Quantity > 0;
-                btn.Click += (_, _) => addToGrid(p);
+                btn.Click += (_, _) => AddToCart(p);
                 productButtonPanel.Controls.Add(btn);
 
                 _productButtons.Add(name, btn);
                 _products.Add(name, p);
             }
+
+            UpdateSaleSummary();
         }
 
         private void MainTransaction_Resize(object sender, EventArgs e)
@@ -101,101 +120,106 @@ namespace cc105_pose_proj
             totalPanel.Height = (int)(leftPanel.Height * 0.35) + 5;
 
             totalListPanel.Width = (int)(totalPanel.Width * 0.4) + 5;
+            int totalListPadding = 30;
+            foreach (Panel p in totalListPanel.Controls.OfType<Panel>())
+            {
+                var labels = p.Controls.OfType<Label>();
+
+                p.Height = labels.FirstOrDefault()!.Height + 10;
+                p.Width = totalListPanel.Width - totalListPadding;
+                p.Left = totalListPadding;
+
+                FitTotalLabel(labels);
+            }
+
+            int rowGap = 5;
+            totalRowPanel.Top = totalListPanel.Bottom - totalRowPanel.Height - totalListPadding;
+            savedRowPanel.Top = totalRowPanel.Top - savedRowPanel.Height - rowGap;
+            subTotalRowPanel.Top = savedRowPanel.Top - subTotalRowPanel.Height - rowGap;
+
             actionPanel.Width = (int)(totalPanel.Width * 0.6);
         }
 
-        private DataRow? SelectedRow() =>
-            (transactionGrid.CurrentRow?.DataBoundItem as DataRowView)?.Row;
-
-        private void addToGrid(Product p)
+        private void FitTotalLabel(IEnumerable<Label> labels)
         {
-            DataRow? row = _items.AsEnumerable()
-                .FirstOrDefault(r => r.Field<string>("Name") == p.Name);
-
-            if (row == null)
+            foreach (Label l in labels)
             {
-                row = _items.NewRow();
-                row["Name"] = p.Name;
-                row["Price"] = p.Price;
-                row["Qty"] = 1;
-                _items.Rows.InsertAt(row, 0);
+                if (l.Anchor.HasFlag(AnchorStyles.Left))
+                    l.Left = 0;
+                else if (l.Anchor.HasFlag(AnchorStyles.Right))
+                    l.Left = l.Parent!.Width - l.Width;
+                l.Top = (l.Parent!.Height - l.Height) / 2;
+            }
+        }
+
+        private string? GetSelectedProductName()
+        {
+            var view = transactionGrid.CurrentRow?.DataBoundItem as DataRowView;
+            return view?.Row.Field<string>("Name");
+        }
+
+        private void AddToCart(Product p)
+        {
+            var existing = _cart.FirstOrDefault(c => c.Product.Id == p.Id);
+            int currentQty = existing?.Quantity ?? 0;
+
+            if (currentQty >= p.Quantity)
+            {
+                MessageBox.Show(
+                    $"Cannot add more than {p.Quantity} units of '{p.Name}'. Stock limit reached.",
+                    "Insufficient Stock",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (existing == null)
+            {
+                _cart.Insert(0, new CartItem(p, 1));
             }
             else
             {
-                int newQty = (int)row["Qty"] + 1;
-
-                int index = _items.Rows.IndexOf(row);
-
-                DataRow newRow = _items.NewRow();
-                newRow["Name"] = row["Name"];
-                newRow["Price"] = row["Price"];
-                newRow["Qty"] = newQty;
-
-                _items.Rows.RemoveAt(index);
-                _items.Rows.InsertAt(newRow, 0);
+                _cart.Remove(existing);
+                _cart.Insert(0, existing with { Quantity = currentQty + 1 });
             }
 
-            UpdateProductQuantity(p.Name, -1);
-            updateTotal();
-            focusFirstRow();
+            UpdateSaleSummary();
+            FocusFirstRow();
         }
 
-        private void focusFirstRow()
+        private void RemoveOne()
         {
-            transactionGrid.ClearSelection();
-            if (_items.Rows.Count > 0)
+            string? name = GetSelectedProductName();
+            if (name == null) return;
+
+            var existing = _cart.FirstOrDefault(c => c.Product.Name == name);
+            if (existing == null) return;
+
+            int index = _cart.IndexOf(existing);
+            if (existing.Quantity > 1)
             {
-                transactionGrid.CurrentCell = transactionGrid.Rows[0].Cells[0];
-                transactionGrid.Rows[0].Selected = true;
+                _cart[index] = existing with { Quantity = existing.Quantity - 1 };
             }
+            else
+            {
+                _cart.RemoveAt(index);
+            }
+
+            UpdateSaleSummary();
         }
 
-        private void removeOne(DataRow row)
+        private void RemoveAll()
         {
-            int qty = (int)row["Qty"];
-            UpdateProductQuantity(row.Field<string>("Name")!, 1);
+            string? name = GetSelectedProductName();
+            if (name == null) return;
 
-            int index = _items.Rows.IndexOf(row);
-
-            if (qty > 1) row["Qty"] = qty - 1;
-            else _items.Rows.RemoveAt(index);
-
-            updateTotal();
+            _cart.RemoveAll(c => c.Product.Name == name);
+            UpdateSaleSummary();
         }
 
-        private void removeAll(DataRow row)
+        private void ClearCart()
         {
-            UpdateProductQuantity(row.Field<string>("Name")!, (int)row["Qty"]);
-            _items.Rows.Remove(row);
-            updateTotal();
-        }
-
-        private void UpdateProductQuantity(string productName, int quantityChange)
-        {
-            Product p = _products[productName];
-
-            int newQty = p.Quantity + quantityChange;
-            p.Quantity = newQty;
-
-            _productButtons[productName].Enabled = newQty > 0;
-        }
-
-        private void updateTotal() =>
-            totalLabel.Text = _items.AsEnumerable().Sum(r => r.Field<decimal>("Total")).ToString("C2");
-
-        private void kryptonButton1_Click(object sender, EventArgs e)
-        {
-            if (SelectedRow() is DataRow row) removeOne(row);
-        }
-
-        private void removeAllBtn_Click(object sender, EventArgs e)
-        {
-            if (SelectedRow() is DataRow row) removeAll(row);
-        }
-
-        private void clearTableBtn_Click(object sender, EventArgs e)
-        {
-            if (_items.Rows.Count == 0) return;
+            if (_cart.Count == 0) return;
 
             DialogResult result = MessageBox.Show(
                 "Are you sure you want to clear all items?",
@@ -207,23 +231,75 @@ namespace cc105_pose_proj
             if (result != DialogResult.Yes)
                 return;
 
-            foreach (DataRow row in _items.Rows)
-                UpdateProductQuantity(row.Field<string>("Name")!, row.Field<int>("Qty"));
-            
+            _cart.Clear();
+            UpdateSaleSummary();
+        }
+
+        private void UpdateSaleSummary()
+        {
+            SaleSummary summary = _pricingService.CalculateSale(_cart, _activeDiscounts);
 
             _items.Rows.Clear();
-            updateTotal();
+            foreach (var line in summary.LineItems)
+            {
+                DataRow row = _items.NewRow();
+                row["Name"] = line.Product.Name;
+                row["Price"] = line.Price;
+                row["Qty"] = line.Quantity;
+                row["Discount"] = line.AppliedDiscount != null
+                    ? $"{line.AppliedDiscount.Name}"
+                    : "N/A";
+                row["Total"] = line.LineTotal;
+                _items.Rows.Add(row);
+            }
+
+            subTotalLabel.Text = summary.Subtotal.ToString("C2");
+            discountLabel.Text = summary.TotalSaved > 0
+                ? $"-{summary.TotalSaved:C2}"
+                : "₱0.00";
+            totalLabel.Text = summary.GrandTotal.ToString("C2");
+
+            foreach (var (name, product) in _products)
+            {
+                int inCart = _cart.FirstOrDefault(c => c.Product.Id == product.Id)?.Quantity ?? 0;
+                int remaining = product.Quantity - inCart;
+
+                if (_productButtons.TryGetValue(name, out var btn))
+                {
+                    btn.Enabled = remaining > 0;
+                }
+            }
+
+            foreach (Panel pn in totalListPanel.Controls.OfType<Panel>())
+            {
+                FitTotalLabel(pn.Controls.OfType<Label>());
+            }
         }
+
+        private void FocusFirstRow()
+        {
+            transactionGrid.ClearSelection();
+            if (_items.Rows.Count > 0)
+            {
+                transactionGrid.CurrentCell = transactionGrid.Rows[0].Cells[0];
+                transactionGrid.Rows[0].Selected = true;
+            }
+        }
+
+        private void kryptonButton1_Click(object sender, EventArgs e) => RemoveOne();
+        private void removeAllBtn_Click(object sender, EventArgs e) => RemoveAll();
+        private void clearTableBtn_Click(object sender, EventArgs e) => ClearCart();
 
         private void backBtn_Click(object sender, EventArgs e)
         {
-            if (_items.Rows.Count > 0){
+            if (_cart.Count > 0)
+            {
                 DialogResult result = MessageBox.Show(
-                "Cancel this transaction and go back to home?",
-                "Confirm Exit",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button2);
+                    "Cancel this transaction and go back to home?",
+                    "Confirm Exit",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2);
 
                 if (result != DialogResult.Yes)
                     return;
