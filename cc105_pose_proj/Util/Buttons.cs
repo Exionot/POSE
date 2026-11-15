@@ -13,6 +13,7 @@ namespace cc105_pose_proj.Util
             btn.Margin = new Padding(0);
 
             btn.Text = p.Name;
+            btn.TextAlign = ContentAlignment.BottomCenter;
 
             Image img = Image.FromFile(AppPaths.ResourceDir + p.Image);
 
@@ -24,7 +25,7 @@ namespace cc105_pose_proj.Util
             btn.Image?.Dispose();
             btn.Image = new Bitmap(img, new Size(width, height));
 
-            btn.ImageAlign = ContentAlignment.MiddleCenter;
+            btn.ImageAlign = ContentAlignment.BottomCenter;
             btn.TextImageRelation = TextImageRelation.ImageAboveText;
 
             return btn;

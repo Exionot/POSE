@@ -4,8 +4,8 @@ using cc105_pose_proj.Services;
 using cc105_pose_proj.UserControls;
 using cc105_pose_proj.Util;
 using System.Data;
-using System.Windows.Forms;
 using static cc105_pose_proj.Services.PricingService;
+using Krypton.Toolkit;
 
 namespace cc105_pose_proj
 {
@@ -39,9 +39,9 @@ namespace cc105_pose_proj
             transactionGrid.Columns["Total"]!.DefaultCellStyle.Format = "C2";
             transactionGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            transactionGrid.Columns["Name"]!.FillWeight = 38f;
+            transactionGrid.Columns["Name"]!.FillWeight = 42f;
             transactionGrid.Columns["Price"]!.FillWeight = 16f;
-            transactionGrid.Columns["Qty"]!.FillWeight = 12f;
+            transactionGrid.Columns["Qty"]!.FillWeight = 8f;
             transactionGrid.Columns["Discount"]!.FillWeight = 18f;
             transactionGrid.Columns["Total"]!.FillWeight = 16f;
 
@@ -120,24 +120,32 @@ namespace cc105_pose_proj
             totalPanel.Height = (int)(leftPanel.Height * 0.35) + 5;
 
             totalListPanel.Width = (int)(totalPanel.Width * 0.4) + 5;
-            int totalListPadding = 30;
+            int totalPanelPadding = 30;
             foreach (Panel p in totalListPanel.Controls.OfType<Panel>())
             {
                 var labels = p.Controls.OfType<Label>();
 
                 p.Height = labels.FirstOrDefault()!.Height + 10;
-                p.Width = totalListPanel.Width - totalListPadding;
-                p.Left = totalListPadding;
+                p.Width = totalListPanel.Width - totalPanelPadding;
+                p.Left = totalPanelPadding;
 
                 FitTotalLabel(labels);
             }
 
             int rowGap = 5;
-            totalRowPanel.Top = totalListPanel.Bottom - totalRowPanel.Height - totalListPadding;
+            totalRowPanel.Top = totalListPanel.Bottom - totalRowPanel.Height - totalPanelPadding;
             savedRowPanel.Top = totalRowPanel.Top - savedRowPanel.Height - rowGap;
             subTotalRowPanel.Top = savedRowPanel.Top - subTotalRowPanel.Height - rowGap;
 
             actionPanel.Width = (int)(totalPanel.Width * 0.6);
+            int buttonMargin = 10;
+            int totalButtonMargin = buttonMargin * 4; 
+            foreach (KryptonButton b in flowLayoutPanel1.Controls.OfType<KryptonButton>())
+            {
+                b.AutoSize = false;
+                b.Height = (actionPanel.Height - totalPanelPadding - totalButtonMargin) / 2;
+                b.Width = (actionPanel.Width - totalPanelPadding - (totalButtonMargin*2)) / 2;
+            }
         }
 
         private void FitTotalLabel(IEnumerable<Label> labels)
