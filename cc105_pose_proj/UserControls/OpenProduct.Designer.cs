@@ -50,6 +50,7 @@
             Controls.Add(pictureBox1);
             Name = "OpenProduct";
             Size = new Size(439, 484);
+            Load += OpenProduct_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }

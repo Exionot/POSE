@@ -85,7 +85,7 @@ namespace cc105_pose_proj.UserControls
 
         private void editProduct(Product p)
         {
-            PopupForm.Open(this, new OpenProduct(), p.Name);
+            PopupForm.Open(this, new OpenProduct(p), p.Name);
         }
 
         private void fixProductPanel()

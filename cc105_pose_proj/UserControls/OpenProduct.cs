@@ -1,20 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using cc105_pose_proj.Forms;
+using cc105_pose_proj.Models;
 
 namespace cc105_pose_proj.UserControls
 {
-    public partial class OpenProduct : UserControl
+    public partial class OpenProduct : UserControl, IDialogControl
     {
-        public OpenProduct()
+        public event EventHandler<DialogResult>? RequestClose;
+        private readonly Product _product;
+        public OpenProduct(Product product)
         {
+            _product = product;
             InitializeComponent();
+            ResizeControl();
+        }
+
+        private void ResizeControl()
+        {
+            MainForm? main = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            if (main == null)
+                return;
+
+            this.Size = new Size(
+                (int)(main.ClientSize.Width / 2),
+                (int)(main.ClientSize.Height * 0.9)
+            );
+        }
+
+        private void OpenProduct_Load(object sender, EventArgs e)
+        {
         }
     }
 }
