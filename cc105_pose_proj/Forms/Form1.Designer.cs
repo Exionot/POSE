@@ -42,6 +42,8 @@
             pictureBox1 = new PictureBox();
             button5 = new Button();
             dataGridView1 = new DataGridView();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            button6 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -167,11 +169,32 @@
             dataGridView1.Size = new Size(349, 234);
             dataGridView1.TabIndex = 13;
             // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.BackColor = SystemColors.ControlDark;
+            flowLayoutPanel2.Location = new Point(830, 93);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(491, 295);
+            flowLayoutPanel2.TabIndex = 14;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(830, 26);
+            button6.Name = "button6";
+            button6.Size = new Size(133, 48);
+            button6.TabIndex = 15;
+            button6.Text = "load discounts";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1333, 450);
+            Controls.Add(button6);
+            Controls.Add(flowLayoutPanel2);
             Controls.Add(dataGridView1);
             Controls.Add(button5);
             Controls.Add(pictureBox1);
@@ -214,5 +237,7 @@
         private PictureBox pictureBox1;
         private Button button5;
         private DataGridView dataGridView1;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Button button6;
     }
 }

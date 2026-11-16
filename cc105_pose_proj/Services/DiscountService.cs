@@ -8,7 +8,7 @@ namespace cc105_pose_proj.Services
     {
         private readonly IRepository<Discount> _discountRepo = new DiscountRepository();
 
-        public DiscountService(IRepository<Discount>? repo) 
+        public DiscountService(IRepository<Discount>? repo = null) 
         {
             _discountRepo = repo ?? new DiscountRepository();
         }

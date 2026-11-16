@@ -1,6 +1,8 @@
 using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
+using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
+using cc105_pose_proj.UserControls;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -9,7 +11,7 @@ namespace cc105_pose_proj
     public partial class Form1 : Form
     {
         private readonly IRepository<Business> _businessRepo = new BusinessRepository();
-        private readonly IRepository<Product> _productRepo = new ProductRepository(); 
+        private readonly IRepository<Product> _productRepo = new ProductRepository();
         public static string imgPath;
         public Form1()
         {
@@ -192,6 +194,19 @@ namespace cc105_pose_proj
             DataSet ds = new DataSet();
             a.Fill(ds);
             dataGridView1.DataSource = ds.Tables[0];
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            flowLayoutPanel2.Controls.Clear();
+            var discountService = new DiscountService();
+
+            var allDiscount = discountService.GetDiscounts();
+
+            foreach (var discount in allDiscount)
+            {
+                flowLayoutPanel2.Controls.Add(new DiscountTicket(discount, 200));
+            }
         }
     }
 }
