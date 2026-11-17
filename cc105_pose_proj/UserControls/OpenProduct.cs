@@ -9,7 +9,7 @@ namespace cc105_pose_proj.UserControls
     public partial class OpenProduct : UserControl, IDialogControl
     {
         public event EventHandler<DialogResult>? RequestClose;
-        //private readonly BusinessService _businessService = new();
+        private readonly BusinessService _businessService = new();
         private readonly Product? _product;
         public OpenProduct(Product? product)
         {
@@ -32,20 +32,33 @@ namespace cc105_pose_proj.UserControls
 
         private void OpenProduct_Load(object sender, EventArgs e)
         {
-            if (!Session.CurrentUser!.IsAdmin)
-                return;
+            var user = Session.CurrentUser;
+            if (user == null) return;
+
+            foreach (var business in _businessService.GetBusinesses())
+                businessComboBox.Items.Add(business);
+
+            int? targetBusinessId = _product?.Business.Id ?? user.Business?.Id;
+
+            if (targetBusinessId.HasValue)
+            {
+                businessComboBox.SelectedItem = businessComboBox.Items
+                    .OfType<Business>()
+                    .FirstOrDefault(b => b.Id == targetBusinessId.Value);
+            }
+
+            businessRowPanel.Enabled = user.IsAdmin;
 
             if (_product == null)
                 return;
 
             Image img = Image.FromFile(AppPaths.ResourceDir + _product.Image);
-            productPictureBox.Image = img;
+            productPictureBox.Image = (Image)img.Clone();
             img?.Dispose();
 
             nameField.Text = _product.Name;
             priceField.Text = _product.Price.ToString();
             stockField.Text = _product.Quantity.ToString();
-
         }
 
         private void OpenProduct_Resize(object sender, EventArgs e)
@@ -61,9 +74,9 @@ namespace cc105_pose_proj.UserControls
             backBtn.Left = backButtonMargin;
 
 
-            int pictureBoxSize = imagePanel.Height - selectImgBtn.Height - 
+            int pictureBoxSize = imagePanel.Height - selectImgBtn.Height -
                 (selectImgBtn.Margin.Top + selectImgBtn.Margin.Bottom);
-            productPictureBox.Size = new Size (pictureBoxSize, pictureBoxSize);
+            productPictureBox.Size = new Size(pictureBoxSize, pictureBoxSize);
 
             selectImgBtn.Top = productPictureBox.Bottom + selectImgBtn.Margin.Top;
 
@@ -87,8 +100,14 @@ namespace cc105_pose_proj.UserControls
                 rowPanel.Left = 0;
                 infoPanelTop += rowPanel.Height;
             }
+        }
 
-            businessRowPanel.Enabled = Session.CurrentUser!.IsAdmin;
+        private void NumberOnly(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

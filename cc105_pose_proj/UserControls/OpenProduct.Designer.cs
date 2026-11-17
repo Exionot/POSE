@@ -120,6 +120,7 @@
             productPictureBox.Location = new Point(141, 0);
             productPictureBox.Name = "productPictureBox";
             productPictureBox.Size = new Size(188, 171);
+            productPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             productPictureBox.TabIndex = 0;
             productPictureBox.TabStop = false;
             // 
@@ -191,7 +192,6 @@
             // 
             businessComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             businessComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            businessComboBox.Items.AddRange(new object[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" });
             businessComboBox.Location = new Point(13, 35);
             businessComboBox.MinimumSize = new Size(0, 30);
             businessComboBox.Name = "businessComboBox";
@@ -272,6 +272,7 @@
             stockField.StateCommon.Content.Padding = new Padding(5);
             stockField.TabIndex = 3;
             stockField.Text = "kryptonTextBox2";
+            stockField.KeyPress += NumberOnly;
             // 
             // priceRowPanel
             // 
@@ -297,6 +298,7 @@
             priceField.StateCommon.Content.Padding = new Padding(5);
             priceField.TabIndex = 2;
             priceField.Text = "kryptonTextBox2";
+            priceField.KeyPress += NumberOnly;
             // 
             // nameRowPanel
             // 
