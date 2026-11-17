@@ -1,4 +1,5 @@
 ﻿using cc105_pose_proj.Data;
+using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
 using cc105_pose_proj.Util;
@@ -82,14 +83,9 @@ namespace cc105_pose_proj.UserControls
             fixProductPanel();
         }
 
-        private void EditProductBtn_Click(object? sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void editProduct(Product p)
         {
-            new OpenProductForm(p).ShowDialog();
+            PopupForm.Open(this, new OpenProduct(p), p.Name);
         }
 
         private void fixProductPanel()
