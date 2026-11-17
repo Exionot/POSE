@@ -7,9 +7,9 @@ namespace cc105_pose_proj.Services
     {
         private readonly IRepository<Business> _businessRepo;
 
-        public BusinessService(IRepository<Business> businessRepo)
+        public BusinessService(IRepository<Business>? businessRepo = null)
         {
-            _businessRepo = businessRepo;
+            _businessRepo = businessRepo ?? new BusinessRepository();
         }
 
         public List<Business> GetBusinesses()
