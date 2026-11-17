@@ -4,7 +4,7 @@ using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.Services
 {
-    public class ProductService
+    public class ProductService : BaseService
     {
         private readonly IRepository<Product> _productRepo;
 
@@ -15,29 +15,29 @@ namespace cc105_pose_proj.Services
 
         public List<Product> GetProducts()
         {
+            if (CurrentUser == null)
+                return [];
+
             var allProducts = _productRepo.GetAll();
 
-            int? currentBusinessId = Session.CurrentUser?.Business?.Id; 
-
-            if (currentBusinessId == null)
+            if (IsAdmin)
                 return allProducts;
 
-            return allProducts.Where(p => p.Business.Id == currentBusinessId.Value).ToList();
+            if (CurrentBusinessId == null)
+                return [];
+
+            return allProducts.Where(p => p.Business.Id == CurrentBusinessId.Value).ToList();
         }
 
         public Product? GetProductById(int id)
         {
-            var product = _productRepo.GetById(id);
+            if (CurrentUser == null) return null;
 
+            var product = _productRepo.GetById(id);
             if (product == null) 
                 return null;
 
-            int? currentBusinessId = Session.CurrentUser?.Business?.Id;
-
-            if (currentBusinessId == null)
-                return product;
-
-            if (product.Business.Id != currentBusinessId.Value)
+            if (!IsAdmin && product.Business.Id != CurrentBusinessId)
                 return null;
 
             return product;
@@ -45,12 +45,21 @@ namespace cc105_pose_proj.Services
 
         public bool CreateProduct(Product product, string imageSourcePath)
         {
+            if (CurrentUser == null) return false;
+
+            if (!IsAdmin)
+            {
+                if (CurrentBusiness == null)
+                    return false;
+
+                product.Business = CurrentBusiness;
+            }
+
+            if (product.Business == null)
+                return false;
+
             string savedImageName = ImgUtil.SaveImg(imageSourcePath);
             product.Image = savedImageName;
-
-            var currentUserBusiness = Session.CurrentUser?.Business;
-            if (currentUserBusiness != null)
-                product.Business = currentUserBusiness;
 
             try
             {
@@ -73,24 +82,33 @@ namespace cc105_pose_proj.Services
 
         public bool UpdateProduct(Product product, string? newImagePath = null)
         {
+            if (CurrentUser == null) return false;
+
+            var existing = GetProductById(product.Id);
+            if (existing == null) return false;
+
+            if (!IsAdmin)
+                product.Business = existing.Business;
+
             if (!string.IsNullOrEmpty(newImagePath))
-            {
-                product.Image = ImgUtil.ReplaceImage(product.Image, newImagePath);
-            }
+                product.Image = ImgUtil.ReplaceImage(existing.Image, newImagePath);
+            else 
+                product.Image = existing.Image;
 
             return _productRepo.Update(product);
         }
 
         public bool DeleteProduct(int id)
         {
+            if (CurrentUser == null) return false;
+
             var product = GetProductById(id);
             if (product == null) return false;
 
             bool isDeleted = _productRepo.Delete(id);
             if (isDeleted)
-            {
                 ImgUtil.DeleteImage(product.Image); 
-            }
+            
             return isDeleted;
         }
     }
