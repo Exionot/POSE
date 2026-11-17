@@ -1,10 +1,9 @@
 ﻿using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
-using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.Services
 {
-    public class BusinessService
+    public class BusinessService : BaseService
     {
         private readonly IRepository<Business> _businessRepo;
 
@@ -16,19 +15,16 @@ namespace cc105_pose_proj.Services
         public List<Business> GetBusinesses()
         {
             var allBusiness = _businessRepo.GetAll();
-            var userBusiness = Session.CurrentUser?.Business;
 
-            if (userBusiness == null)
+            if (CurrentBusiness == null)
                 return allBusiness;
 
-            return [userBusiness];
+            return [CurrentBusiness];
         }
 
         public Business? GetBusinessById(int id)
         {
-            var userBusiness = Session.CurrentUser?.Business;
-
-            if (userBusiness != null && userBusiness.Id != id)
+            if (CurrentBusiness != null && CurrentBusiness.Id != id)
                 return null;
 
             return _businessRepo.GetById(id);
@@ -36,10 +32,9 @@ namespace cc105_pose_proj.Services
 
         public bool CreateBusiness(Business business)
         {
-            var currentUser = Session.CurrentUser;
-            if (currentUser == null) return false;
+            if (CurrentUser == null) return false;
 
-            if (!currentUser.IsAdmin && currentUser.Business != null)
+            if (!IsAdmin && CurrentBusiness != null)
                 return false;
 
             return _businessRepo.Add(business);
@@ -47,10 +42,9 @@ namespace cc105_pose_proj.Services
 
         public bool UpdateBusiness(Business business)
         {
-            var currentUser = Session.CurrentUser;
-            if (currentUser == null) return false;
+            if (CurrentUser == null) return false;
 
-            if (!currentUser.IsAdmin && currentUser.Business?.Id != business.Id)
+            if (!IsAdmin && CurrentBusiness?.Id != business.Id)
                 return false;
 
             return _businessRepo.Update(business);
@@ -58,10 +52,9 @@ namespace cc105_pose_proj.Services
 
         public bool DeleteBusiness(int id)
         {
-            var currentUser = Session.CurrentUser;
-            if (currentUser == null) return false;
+            if (CurrentUser == null) return false;
 
-            if (!currentUser.IsAdmin)
+            if (!IsAdmin)
                 return false;
 
             return _businessRepo.Delete(id);
