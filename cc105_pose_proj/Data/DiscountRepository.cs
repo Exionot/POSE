@@ -226,7 +226,7 @@ namespace cc105_pose_proj.Data
                 Name = reader.GetString("business_name")
             };
             string typeString = reader.GetString("type");
-            if (!Enum.TryParse<Discount.DiscountType>(typeString, true, out var type))
+            if (!Enum.TryParse<DiscountType>(typeString, true, out var type))
                 throw new InvalidOperationException($"Unknown discount type '{typeString}'");
 
             return new Discount
