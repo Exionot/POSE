@@ -1,19 +1,15 @@
-﻿using cc105_pose_proj.Models;
+﻿using cc105_pose_proj.Data.Mappers;
+using cc105_pose_proj.Models;
 using MySql.Data.MySqlClient;
 
 namespace cc105_pose_proj.Data
 {
     public class UserRepository : IRepository<User>
     {
-        private string BaseSelectQuery = @"
-            select 
-                u.id as user_id, 
-                u.username as username, 
-                u.is_admin as is_admin, 
-                b.id as business_id, 
-                b.name as business_name 
-            from users as u left join business as b 
-            on u.id = b.user_id
+        private string BaseSelectQuery => $@"
+            select {UserMapper.Columns}
+            from users as u left join business as ub 
+            on u.id = ub.user_id
         ";
 
         public List<User> GetAll()
@@ -27,7 +23,7 @@ namespace cc105_pose_proj.Data
             using var reader = cmd.ExecuteReader();
             while (reader.Read())
             {
-                list.Add(CreateUser(reader));
+                list.Add(UserMapper.CreateUser(reader));
             }
 
             return list;
@@ -38,7 +34,7 @@ namespace cc105_pose_proj.Data
             using var conn = DbConnector.GetConnection();
             conn.Open();
 
-            string query = $"{BaseSelectQuery} where user_id = @id limit 1";
+            string query = $"{BaseSelectQuery} where u.id = @id limit 1";
             using var cmd = new MySqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@id", id);
 
@@ -47,7 +43,7 @@ namespace cc105_pose_proj.Data
             if (!reader.Read())
                 return null;
 
-            return CreateUser(reader);
+            return UserMapper.CreateUser(reader);
         }
 
         public bool Add(User entity)
@@ -150,29 +146,6 @@ namespace cc105_pose_proj.Data
             cmd.Parameters.AddWithValue("@id", id);
 
             return cmd.ExecuteNonQuery() > 0;
-        }
-
-        private User CreateUser(MySqlDataReader reader)
-        {
-            Business? business = null;
-
-            int businessIdOrdinal = reader.GetOrdinal("business_id");
-            if (!reader.IsDBNull(businessIdOrdinal))
-            {
-                business = new Business
-                {
-                    Id = reader.GetInt32(businessIdOrdinal),
-                    Name = reader.GetString("business_name")
-                };
-            }
-
-            return new User
-            {
-                Id = reader.GetInt32("user_id"),
-                Username = reader.GetString("username"),
-                IsAdmin = reader.GetBoolean("is_admin"),
-                Business = business
-            };
         }
     }
 }
