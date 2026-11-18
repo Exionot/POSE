@@ -1,13 +1,14 @@
 ﻿namespace cc105_pose_proj.Models
 {
+    public enum DiscountType
+    {
+        PERCENTAGE,
+        FIXED,
+        BUY_X_GET_Y
+    }
+
     public class Discount
     {
-        public enum DiscountType
-        {
-            PERCENTAGE,
-            FIXED,
-            BUY_X_GET_Y
-        }
         public int Id { get; init; }
         public required string Name { get; set; }
         public required DiscountType Type { get; set; }

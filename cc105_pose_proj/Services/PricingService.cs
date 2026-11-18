@@ -48,13 +48,13 @@ namespace cc105_pose_proj.Services
                 {
                     switch (applied.Type)
                     {
-                        case Discount.DiscountType.PERCENTAGE:
+                        case DiscountType.PERCENTAGE:
                             discountAmount = (price * (applied.Value / 100m)) * quantity;
                             break;
-                        case Discount.DiscountType.FIXED:
+                        case DiscountType.FIXED:
                             discountAmount = Math.Min(applied.Value, price) * quantity;
                             break;
-                        case Discount.DiscountType.BUY_X_GET_Y:
+                        case DiscountType.BUY_X_GET_Y:
                             int totalGet = applied.BuyAmount + applied.GetAmount;
                             if (totalGet > 0)
                             {
@@ -106,9 +106,9 @@ namespace cc105_pose_proj.Services
         {
             return discount.Type switch
             {
-                Discount.DiscountType.PERCENTAGE => price * (discount.Value / 100m),
-                Discount.DiscountType.FIXED => Math.Min(discount.Value, price),
-                Discount.DiscountType.BUY_X_GET_Y => 0m,
+                DiscountType.PERCENTAGE => price * (discount.Value / 100m),
+                DiscountType.FIXED => Math.Min(discount.Value, price),
+                DiscountType.BUY_X_GET_Y => 0m,
                 _ => 0m
             };
         }
@@ -125,9 +125,9 @@ namespace cc105_pose_proj.Services
         {
             return discount.Type switch
             {
-                Discount.DiscountType.PERCENTAGE
+                DiscountType.PERCENTAGE
                     => Math.Max(price - (price * (discount.Value / 100m)), 0),
-                Discount.DiscountType.FIXED
+                DiscountType.FIXED
                     => Math.Max(price - discount.Value, 0),
                 _ => price
             };
