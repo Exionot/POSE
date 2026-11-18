@@ -69,12 +69,19 @@ namespace cc105_pose_proj.UserControls
             imagePanel.Height = (int)(this.Height * 0.4);
             infoPanel.Height = (int)(this.Height * 0.5);
 
-            int backButtonMargin = 20;
-            int backButtonSize = headerPanel.Height - backButtonMargin;
+            int backButtonMargin = 15;
+            int backButtonSize = headerPanel.Height - (backButtonMargin * 2);
             backBtn.Size = new Size(backButtonSize, backButtonSize);
             backBtn.Top = backButtonMargin;
             backBtn.Left = backButtonMargin;
 
+            foreach (KryptonButton btn in headerPanel.Controls.OfType<KryptonButton>())
+                btn.Top = (headerPanel.Height - btn.Height) / 2;
+
+            saveBtn.Left = headerPanel.Right - backButtonMargin - saveBtn.Width;
+            deleteBtn.Left = saveBtn.Left - saveBtn.Margin.Left - deleteBtn.Width;
+
+            deleteBtn.Visible = Session.CurrentUser!.IsAdmin;
 
             int pictureBoxSize = imagePanel.Height - selectImgBtn.Height -
                 (selectImgBtn.Margin.Top + selectImgBtn.Margin.Bottom);
@@ -116,7 +123,7 @@ namespace cc105_pose_proj.UserControls
                     return;
 
                 if (!_movementService.RecordMovement(
-                    CurrentProduct.Id, editStock.SelectedType, 
+                    CurrentProduct.Id, editStock.SelectedType,
                     editStock.AdjustedQuantity, out int movementId))
                     return;
 
@@ -128,10 +135,21 @@ namespace cc105_pose_proj.UserControls
                     _movementService.DeleteMovement(movementId);
                     return;
                 }
-    
+
                 CurrentProduct = updatedProduct;
                 stockField.Text = CurrentProduct.Quantity.ToString();
             }
+        }
+
+        private void backBtn_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Close this window? Unsaved actions will be lost!", 
+                "Exit", MessageBoxButtons.OKCancel, 
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.OK) 
+                RequestClose?.Invoke(this, DialogResult.Cancel);
         }
     }
 }

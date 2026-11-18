@@ -31,6 +31,8 @@ namespace cc105_pose_proj.UserControls
         private void InitializeComponent()
         {
             headerPanel = new Panel();
+            deleteBtn = new Krypton.Toolkit.KryptonButton();
+            saveBtn = new Krypton.Toolkit.KryptonButton();
             backBtn = new Krypton.Toolkit.KryptonButton();
             imagePanel = new Panel();
             selectImgBtn = new Krypton.Toolkit.KryptonButton();
@@ -63,12 +65,50 @@ namespace cc105_pose_proj.UserControls
             // headerPanel
             // 
             headerPanel.BackColor = SystemColors.Control;
+            headerPanel.Controls.Add(deleteBtn);
+            headerPanel.Controls.Add(saveBtn);
             headerPanel.Controls.Add(backBtn);
             headerPanel.Dock = DockStyle.Top;
             headerPanel.Location = new Point(0, 0);
             headerPanel.Name = "headerPanel";
             headerPanel.Size = new Size(446, 59);
             headerPanel.TabIndex = 0;
+            // 
+            // deleteBtn
+            // 
+            deleteBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            deleteBtn.Location = new Point(305, 15);
+            deleteBtn.Margin = new Padding(5);
+            deleteBtn.Name = "deleteBtn";
+            deleteBtn.OverrideDefault.Back.Color1 = Color.Brown;
+            deleteBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            deleteBtn.Size = new Size(67, 30);
+            deleteBtn.StateCommon.Back.Color1 = Color.Brown;
+            deleteBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            deleteBtn.StateCommon.Border.Rounding = 5F;
+            deleteBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            deleteBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            deleteBtn.TabIndex = 3;
+            deleteBtn.Values.DropDownArrowColor = Color.Empty;
+            deleteBtn.Values.Text = "Delete";
+            // 
+            // saveBtn
+            // 
+            saveBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            saveBtn.Location = new Point(382, 15);
+            saveBtn.Margin = new Padding(5);
+            saveBtn.Name = "saveBtn";
+            saveBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            saveBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            saveBtn.Size = new Size(54, 30);
+            saveBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            saveBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            saveBtn.StateCommon.Border.Rounding = 5F;
+            saveBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            saveBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            saveBtn.TabIndex = 2;
+            saveBtn.Values.DropDownArrowColor = Color.Empty;
+            saveBtn.Values.Text = "Save";
             // 
             // backBtn
             // 
@@ -86,6 +126,7 @@ namespace cc105_pose_proj.UserControls
             backBtn.TabIndex = 2;
             backBtn.Values.DropDownArrowColor = Color.Empty;
             backBtn.Values.Text = "↩";
+            backBtn.Click += backBtn_Click;
             // 
             // imagePanel
             // 
@@ -345,5 +386,7 @@ namespace cc105_pose_proj.UserControls
         private Krypton.Toolkit.KryptonTextBox stockField;
         private Krypton.Toolkit.KryptonComboBox businessComboBox;
         private Krypton.Toolkit.KryptonButton editStockBtn;
+        private Krypton.Toolkit.KryptonButton deleteBtn;
+        private Krypton.Toolkit.KryptonButton saveBtn;
     }
 }
