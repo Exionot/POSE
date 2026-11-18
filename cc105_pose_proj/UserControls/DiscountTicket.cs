@@ -42,11 +42,11 @@ namespace cc105_pose_proj.UserControls
             typeLabel.Text = _discount.Type.ToString();
             valueLabel.Text = _discount.Type switch
             {
-                Discount.DiscountType.PERCENTAGE
+                DiscountType.PERCENTAGE
                     => (_discount.Value / 100m).ToString("P2"),
-                Discount.DiscountType.FIXED
+                DiscountType.FIXED
                     => _discount.Value.ToString("C2"),
-                Discount.DiscountType.BUY_X_GET_Y
+                DiscountType.BUY_X_GET_Y
                     => $"Buy {_discount.BuyAmount}, Get {_discount.GetAmount}",
                 _ => "N/A"
             };
