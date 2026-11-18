@@ -1,25 +1,10 @@
 ﻿using cc105_pose_proj.UserControls;
 using cc105_pose_proj.Util;
-using Org.BouncyCastle.Crmf;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace cc105_pose_proj
 {
-    using cc105_pose_proj.Models;
     using cc105_pose_proj.Navigation;
     using cc105_pose_proj.Services;
-    using Krypton.Toolkit;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
 
     public partial class Login : UserControl
     {
