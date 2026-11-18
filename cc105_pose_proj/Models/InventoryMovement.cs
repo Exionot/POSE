@@ -15,7 +15,7 @@
 
     public class InventoryMovement
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
         public required Product Product { get; set; }
         public required MovementType Type { get; set; }
         public required int Quantity { get; set; }

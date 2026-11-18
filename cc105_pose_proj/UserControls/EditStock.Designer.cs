@@ -106,10 +106,11 @@ namespace cc105_pose_proj.UserControls
             // confirmBtn
             // 
             confirmBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            confirmBtn.Enabled = false;
             confirmBtn.Location = new Point(6, 5);
             confirmBtn.Margin = new Padding(5);
             confirmBtn.Name = "confirmBtn";
+            confirmBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            confirmBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             confirmBtn.Size = new Size(97, 31);
             confirmBtn.StateCommon.Back.Color1 = Color.Goldenrod;
             confirmBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;

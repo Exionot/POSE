@@ -33,7 +33,7 @@ namespace cc105_pose_proj.UserControls
                 return;
 
             SelectedType = selected.Type;
-            AdjustedQuantity = quantity;
+            AdjustedQuantity = IsAdjust ? Math.Abs(quantity - _currentStock) : quantity;
 
             RequestClose?.Invoke(this, DialogResult.OK);
         }

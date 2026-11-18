@@ -11,10 +11,11 @@ namespace cc105_pose_proj.UserControls
         public event EventHandler<DialogResult>? RequestClose;
         private readonly BusinessService _businessService = new();
         private readonly InventoryMovementService _movementService = new();
-        private readonly Product? _product;
+        private readonly ProductService _productService = new();
+        private Product? CurrentProduct;
         public OpenProduct(Product? product)
         {
-            _product = product;
+            CurrentProduct = product;
             InitializeComponent();
             ResizeControl();
         }
@@ -39,7 +40,7 @@ namespace cc105_pose_proj.UserControls
             foreach (var business in _businessService.GetBusinesses())
                 businessComboBox.Items.Add(business);
 
-            int? targetBusinessId = _product?.Business.Id ?? user.Business?.Id;
+            int? targetBusinessId = CurrentProduct?.Business.Id ?? user.Business?.Id;
 
             if (targetBusinessId.HasValue)
             {
@@ -50,16 +51,16 @@ namespace cc105_pose_proj.UserControls
 
             businessComboBox.Enabled = user.IsAdmin;
 
-            if (_product == null)
+            if (CurrentProduct == null)
                 return;
 
-            Image img = Image.FromFile(AppPaths.ResourceDir + _product.Image);
+            Image img = Image.FromFile(AppPaths.ResourceDir + CurrentProduct.Image);
             productPictureBox.Image = (Image)img.Clone();
             img?.Dispose();
 
-            nameField.Text = _product.Name;
-            priceField.Text = _product.Price.ToString();
-            stockField.Text = _product.Quantity.ToString();
+            nameField.Text = CurrentProduct.Name;
+            priceField.Text = CurrentProduct.Price.ToString();
+            stockField.Text = CurrentProduct.Quantity.ToString();
         }
 
         private void OpenProduct_Resize(object sender, EventArgs e)
@@ -105,16 +106,31 @@ namespace cc105_pose_proj.UserControls
 
         private void editStockBtn_Click(object sender, EventArgs e)
         {
-            var editStock = new EditStock(_product!.Quantity);
+            var editStock = new EditStock(CurrentProduct!.Quantity);
             DialogResult result = PopupForm.Open(this, editStock, "Edit Stock");
 
             if (result == DialogResult.OK)
             {
-                _movementService.RecordMovement(
-                    _product.Id,
-                    editStock.SelectedType,
-                    editStock.AdjustedQuantity
-                );
+                var updatedProduct = _productService.GetProductById(CurrentProduct.Id);
+                if (updatedProduct == null)
+                    return;
+
+                if (!_movementService.RecordMovement(
+                    CurrentProduct.Id, editStock.SelectedType, 
+                    editStock.AdjustedQuantity, out int movementId))
+                    return;
+
+                updatedProduct.Quantity = _movementService.CalculateNewStock(
+                    updatedProduct.Quantity, editStock.AdjustedQuantity, editStock.SelectedType);
+
+                if (!_productService.UpdateProduct(updatedProduct))
+                {
+                    _movementService.DeleteMovement(movementId);
+                    return;
+                }
+    
+                CurrentProduct = updatedProduct;
+                stockField.Text = CurrentProduct.Quantity.ToString();
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using cc105_pose_proj.Data.Mappers;
 using cc105_pose_proj.Models;
 using MySql.Data.MySqlClient;
+using System.Transactions;
 
 namespace cc105_pose_proj.Data
 {
@@ -16,7 +17,7 @@ namespace cc105_pose_proj.Data
                 {ProductMapper.Columns},
                 {UserMapper.Columns}
 
-            from inventory_movements as im
+            from inventory_movement as im
             inner join products as p on im.product_id = p.id
             inner join business as pb on p.business_id = pb.id
             inner join users as u on im.created_by = u.id
@@ -86,18 +87,17 @@ namespace cc105_pose_proj.Data
         public bool Add(InventoryMovement entity, MySqlConnection conn, MySqlTransaction? transaction)
         {
             string query = @"
-                    insert into inventory_movements (product_id, type, quantity, created_by, created_at)
-                    values (@product_id, @type, @quantity, @created_by, @created_at)";
+                insert into inventory_movement (product_id, type, quantity, created_by)
+                values (@product_id, @type, @quantity, @created_by)";
 
             using var cmd = new MySqlCommand(query, conn, transaction);
             cmd.Parameters.AddWithValue("@product_id", entity.Product.Id);
             cmd.Parameters.AddWithValue("@type", entity.Type.ToString());
             cmd.Parameters.AddWithValue("@quantity", entity.Quantity);
             cmd.Parameters.AddWithValue("@created_by", entity.CreatedBy.Id);
-            cmd.Parameters.AddWithValue("@created_at", entity.CreatedAt == default ? DateTime.UtcNow :
-            entity.CreatedAt);
 
-            return cmd.ExecuteNonQuery() > 0;
+            entity.Id = Convert.ToInt32(cmd.ExecuteScalar());
+            return true;
         }
 
         public bool Update(InventoryMovement entity)
@@ -107,7 +107,14 @@ namespace cc105_pose_proj.Data
 
         public bool Delete(int id)
         {
-            throw new NotSupportedException("Inventory movements cannot be deleted.");
+            using var conn = DbConnector.GetConnection();
+            conn.Open();
+
+            string query = "delete from inventory_movement where id = @id";
+            using var cmd = new MySqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            return cmd.ExecuteNonQuery() > 0;
         }
 
         private static InventoryMovement CreateMovement(MySqlDataReader reader)

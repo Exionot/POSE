@@ -91,11 +91,12 @@ namespace cc105_pose_proj.UserControls
 
         private void EditProduct(Product p)
         {
-            if (PopupForm.Open(this, new OpenProduct(p), p.Name) == DialogResult.OK)
-            {
-                RefreshProducts();
-                ViewProduct(p);
-            }
+            PopupForm.Open(this, new OpenProduct(p), p.Name);
+
+            RefreshProducts();
+
+            var updatedProduct = _productService.GetProductById(p.Id);
+            ViewProduct(updatedProduct!);
         }
 
         private void fixProductPanel()

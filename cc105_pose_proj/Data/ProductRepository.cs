@@ -35,7 +35,7 @@ namespace cc105_pose_proj.Data
             using var conn = DbConnector.GetConnection();
             conn.Open();
 
-            string query = $"{BaseSelectQuery} where product_id = @id limit 1";
+            string query = $"{BaseSelectQuery} where p.id = @id limit 1";
             using var cmd = new MySqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@id", id);
 
@@ -77,7 +77,7 @@ namespace cc105_pose_proj.Data
                     quantity = @quantity,
                     price = @price,
                     business_id = @business_id,
-                    image = @image
+                    image = @image,
                     updated_at = now()
                 where id = @id";
             using var cmd = new MySqlCommand(query, conn);
