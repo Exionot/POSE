@@ -1,8 +1,10 @@
 ﻿using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
-using cc105_pose_proj.Util;
 using cc105_pose_proj.Services;
+using cc105_pose_proj.Util;
 using Krypton.Toolkit;
+using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace cc105_pose_proj.UserControls
 {
@@ -13,7 +15,9 @@ namespace cc105_pose_proj.UserControls
         private readonly InventoryMovementService _movementService = new();
         private readonly ProductService _productService = new();
         private Product? CurrentProduct;
-        public OpenProduct(Product? product)
+        private string? NewImagePath;
+        private bool IsSaved = false;
+        public OpenProduct(Product? product = null)
         {
             CurrentProduct = product;
             InitializeComponent();
@@ -42,6 +46,7 @@ namespace cc105_pose_proj.UserControls
 
             int? targetBusinessId = CurrentProduct?.Business.Id ?? user.Business?.Id;
 
+            businessComboBox.SelectedIndex = -1;
             if (targetBusinessId.HasValue)
             {
                 businessComboBox.SelectedItem = businessComboBox.Items
@@ -61,6 +66,8 @@ namespace cc105_pose_proj.UserControls
             nameField.Text = CurrentProduct.Name;
             priceField.Text = CurrentProduct.Price.ToString();
             stockField.Text = CurrentProduct.Quantity.ToString();
+
+            
         }
 
         private void OpenProduct_Resize(object sender, EventArgs e)
@@ -109,10 +116,20 @@ namespace cc105_pose_proj.UserControls
                 rowPanel.Left = 0;
                 infoPanelTop += rowPanel.Height;
             }
+
+            bool isEditMode = CurrentProduct != null;
+            stockField.Enabled = !isEditMode;
+            if (!isEditMode)
+            {
+                stockRowPanel.Controls.Remove(editStockBtn);
+                stockField.Width = stockRowPanel.Width - stockRowPanel.Padding.Right - stockRowPanel.Padding.Left;
+            }
         }
 
         private void editStockBtn_Click(object sender, EventArgs e)
         {
+            if (CurrentProduct == null) return;
+
             var editStock = new EditStock(CurrentProduct!.Quantity);
             DialogResult result = PopupForm.Open(this, editStock, "Edit Stock");
 
@@ -143,13 +160,122 @@ namespace cc105_pose_proj.UserControls
 
         private void backBtn_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show(
-                "Close this window? Unsaved actions will be lost!", 
-                "Exit", MessageBoxButtons.OKCancel, 
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.OK) 
+            if (IsSaved)
                 RequestClose?.Invoke(this, DialogResult.Cancel);
+
+            if (HasUnsavedChanges())
+            {
+                var result = MessageBox.Show(
+                    "Close this window? Unsaved actions will be lost!",
+                    "Exit", MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.OK)
+                    RequestClose?.Invoke(this, DialogResult.Cancel);
+                return;
+            }
+
+            RequestClose?.Invoke(this, DialogResult.Cancel);
+        }
+
+        private bool HasUnsavedChanges()
+        {
+            string name = nameField.Text.Trim();
+            string priceText = priceField.Text.Trim();
+            var selected = businessComboBox.SelectedItem as Business;
+
+            if (CurrentProduct == null)
+            {
+                return NewImagePath != null
+                    || name.Length > 0
+                    || priceText.Length > 0
+                    || selected != null;
+            }
+
+            bool priceChanged = !decimal.TryParse(priceText, out decimal price)
+                                || CurrentProduct.Price != price;
+
+            bool imageChanged = NewImagePath != null
+                && CurrentProduct.Image != Path.GetFileName(NewImagePath);
+
+            return CurrentProduct.Name != name
+                || priceChanged
+                || CurrentProduct.Business?.Id != selected?.Id
+                || imageChanged;
+        }
+
+        private bool TryBuildProduct(out Product product)
+        {
+            product = null!;
+
+            string name = nameField.Text.Trim();
+            if (name.Length == 0) return false;
+
+            if (!decimal.TryParse(priceField.Text, NumberStyles.Number,
+                    CultureInfo.CurrentCulture, out decimal price) || price < 0) return false;
+
+            if (businessComboBox.SelectedItem is not Business business) return false;
+
+            NewImagePath ??= AppPaths.ResourceDir + "Default.png";
+
+            product = new Product
+            {
+                Id = CurrentProduct?.Id ?? 0,
+                Name = name,
+                Price = price,
+                Quantity = int.Parse(stockField.Text),
+                Business = business
+            };
+            return true;
+        }
+
+        private void selectImgBtn_Click(object sender, EventArgs e)
+        {
+            string? imgPath = SelectImage();
+            if (imgPath == null) return;
+
+            NewImagePath = imgPath;
+            productPictureBox.Image = Image.FromFile(NewImagePath);
+        }
+
+        private string? SelectImage()
+        {
+            using var fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Select an Image";
+            fileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return fileDialog.FileName;
+            }
+
+            return null;
+        }
+
+        private void saveBtn_Click(object sender, EventArgs e)
+        {
+            if (!TryBuildProduct(out var product))
+            {
+                MessageBox.Show("Could not save product. Check your input.", "Save Failed");
+                return;
+            }
+
+            bool isEditMode = CurrentProduct != null;
+
+            bool success = isEditMode ?
+                _productService.UpdateProduct(product, NewImagePath) :
+                _productService.CreateProduct(product, NewImagePath!);
+            string message = isEditMode ? "Product update success!" : "Product creation success!";
+
+            if (!success)
+            {
+                MessageBox.Show("Something went wrong", "Fail");
+                return;
+            }
+            MessageBox.Show(message, "Success");
+            IsSaved = true;
+            CurrentProduct = product;
+            NewImagePath = null;
         }
     }
 }

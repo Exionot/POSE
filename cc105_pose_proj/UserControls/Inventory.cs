@@ -136,7 +136,9 @@ namespace cc105_pose_proj.UserControls
 
         private void newProductBtn_Click(object sender, EventArgs e)
         {
+            PopupForm.Open(this, new OpenProduct(), "New Product");
 
+            RefreshProducts();
         }
 
         private void editProductBtn_Click_1(object sender, EventArgs e)

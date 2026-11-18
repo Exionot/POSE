@@ -109,6 +109,7 @@ namespace cc105_pose_proj.UserControls
             saveBtn.TabIndex = 2;
             saveBtn.Values.DropDownArrowColor = Color.Empty;
             saveBtn.Values.Text = "Save";
+            saveBtn.Click += saveBtn_Click;
             // 
             // backBtn
             // 
@@ -155,6 +156,7 @@ namespace cc105_pose_proj.UserControls
             selectImgBtn.TabIndex = 1;
             selectImgBtn.Values.DropDownArrowColor = Color.Empty;
             selectImgBtn.Values.Text = "Select Image";
+            selectImgBtn.Click += selectImgBtn_Click;
             // 
             // productPictureBox
             // 
