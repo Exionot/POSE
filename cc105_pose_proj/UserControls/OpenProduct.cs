@@ -102,14 +102,6 @@ namespace cc105_pose_proj.UserControls
             }
         }
 
-        private void NumberOnly(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
         private void addStockBtn_Click(object sender, EventArgs e)
         {
             if (!int.TryParse(stockField.Text, out int stock))
@@ -123,9 +115,15 @@ namespace cc105_pose_proj.UserControls
         {
             if (!int.TryParse(stockField.Text, out int stock))
                 return;
-            int newStock = (stock - 1) > 0 ? stock-1 : 0;
+            int newStock = (stock - 1) > 0 ? stock - 1 : 0;
 
             stockField.Text = newStock.ToString();
+        }
+
+        private void editStockBtn_Click(object sender, EventArgs e)
+        {
+            int.TryParse(stockField.Text, out int stock);
+            PopupForm.Open(this, new EditStock(stock), "Edit Stock");
         }
     }
 }

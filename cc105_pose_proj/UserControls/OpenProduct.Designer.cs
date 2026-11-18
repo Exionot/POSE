@@ -1,4 +1,6 @@
-﻿namespace cc105_pose_proj.UserControls
+﻿using cc105_pose_proj.Util;
+
+namespace cc105_pose_proj.UserControls
 {
     partial class OpenProduct
     {
@@ -227,6 +229,7 @@
             editStockBtn.TabIndex = 2;
             editStockBtn.Values.DropDownArrowColor = Color.Empty;
             editStockBtn.Values.Text = "Edit Stock";
+            editStockBtn.Click += editStockBtn_Click;
             // 
             // stockField
             // 
@@ -241,7 +244,7 @@
             stockField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             stockField.StateCommon.Content.Padding = new Padding(5);
             stockField.TabIndex = 3;
-            stockField.KeyPress += NumberOnly;
+            stockField.KeyPress += InputUtil.NumberOnly;
             // 
             // priceRowPanel
             // 
@@ -266,7 +269,7 @@
             priceField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             priceField.StateCommon.Content.Padding = new Padding(5);
             priceField.TabIndex = 2;
-            priceField.KeyPress += NumberOnly;
+            priceField.KeyPress += InputUtil.DecimalOnly;
             // 
             // nameRowPanel
             // 
