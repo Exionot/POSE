@@ -2,6 +2,7 @@
 using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
+using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.UserControls
@@ -9,7 +10,7 @@ namespace cc105_pose_proj.UserControls
     public partial class Inventory : UserControl
     {
         private readonly INavigator _nav;
-        private readonly IRepository<Product> _productRepo = new ProductRepository();
+        private readonly ProductService _productService = new();
         private Product selectedProduct = null!;
         public Inventory(INavigator nav)
         {
@@ -50,7 +51,7 @@ namespace cc105_pose_proj.UserControls
                 panel.Visible = false;
             }
 
-            List<Product> productList = _productRepo.GetAll();
+            List<Product> productList = _productService.GetProducts();
 
             allProductPanel.Controls.Clear();
             foreach (Product p in productList)
