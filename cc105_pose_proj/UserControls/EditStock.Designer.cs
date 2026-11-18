@@ -30,8 +30,8 @@ namespace cc105_pose_proj.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            stockField = new Krypton.Toolkit.KryptonTextBox();
-            label3 = new Label();
+            quantityField = new Krypton.Toolkit.KryptonTextBox();
+            quantityLabel = new Label();
             label1 = new Label();
             movementReasonComboBox = new Krypton.Toolkit.KryptonComboBox();
             buttonPanel = new Panel();
@@ -41,35 +41,36 @@ namespace cc105_pose_proj.UserControls
             buttonPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // stockField
+            // quantityField
             // 
-            stockField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            stockField.Location = new Point(23, 35);
-            stockField.Margin = new Padding(3, 3, 3, 10);
-            stockField.Name = "stockField";
-            stockField.Size = new Size(293, 31);
-            stockField.StateCommon.Border.Color1 = SystemColors.ControlDark;
-            stockField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            stockField.StateCommon.Border.Rounding = 5F;
-            stockField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            stockField.StateCommon.Content.Padding = new Padding(5);
-            stockField.TabIndex = 5;
+            quantityField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            quantityField.Location = new Point(23, 98);
+            quantityField.Margin = new Padding(3, 3, 3, 10);
+            quantityField.Name = "quantityField";
+            quantityField.Size = new Size(293, 31);
+            quantityField.StateCommon.Border.Color1 = SystemColors.ControlDark;
+            quantityField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            quantityField.StateCommon.Border.Rounding = 5F;
+            quantityField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            quantityField.StateCommon.Content.Padding = new Padding(5);
+            quantityField.TabIndex = 5;
+            quantityField.TextChanged += stockField_TextChanged;
             // 
-            // label3
+            // quantityLabel
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label3.Location = new Point(23, 10);
-            label3.Name = "label3";
-            label3.Size = new Size(52, 22);
-            label3.TabIndex = 4;
-            label3.Text = "Stock";
+            quantityLabel.AutoSize = true;
+            quantityLabel.Font = new Font("Inter", 11.25F, FontStyle.Bold);
+            quantityLabel.Location = new Point(23, 73);
+            quantityLabel.Name = "quantityLabel";
+            quantityLabel.Size = new Size(52, 22);
+            quantityLabel.TabIndex = 4;
+            quantityLabel.Text = "Stock";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label1.Location = new Point(23, 76);
+            label1.Location = new Point(23, 8);
             label1.Name = "label1";
             label1.Size = new Size(64, 22);
             label1.TabIndex = 6;
@@ -79,7 +80,7 @@ namespace cc105_pose_proj.UserControls
             // 
             movementReasonComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             movementReasonComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            movementReasonComboBox.Location = new Point(23, 101);
+            movementReasonComboBox.Location = new Point(23, 33);
             movementReasonComboBox.Margin = new Padding(3, 3, 3, 10);
             movementReasonComboBox.MinimumSize = new Size(0, 30);
             movementReasonComboBox.Name = "movementReasonComboBox";
@@ -90,6 +91,7 @@ namespace cc105_pose_proj.UserControls
             movementReasonComboBox.StateCommon.Item.Content.Padding = new Padding(5);
             movementReasonComboBox.StateCommon.Item.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             movementReasonComboBox.TabIndex = 7;
+            movementReasonComboBox.SelectedIndexChanged += movementReasonComboBox_SelectedIndexChanged;
             // 
             // buttonPanel
             // 
@@ -119,6 +121,7 @@ namespace cc105_pose_proj.UserControls
             confirmBtn.TabIndex = 4;
             confirmBtn.Values.DropDownArrowColor = Color.Empty;
             confirmBtn.Values.Text = "Confirm";
+            confirmBtn.Click += confirmBtn_Click;
             // 
             // cancelBtn
             // 
@@ -145,8 +148,8 @@ namespace cc105_pose_proj.UserControls
             Controls.Add(buttonPanel);
             Controls.Add(movementReasonComboBox);
             Controls.Add(label1);
-            Controls.Add(stockField);
-            Controls.Add(label3);
+            Controls.Add(quantityField);
+            Controls.Add(quantityLabel);
             Name = "EditStock";
             Padding = new Padding(20, 10, 20, 10);
             Size = new Size(339, 197);
@@ -159,8 +162,8 @@ namespace cc105_pose_proj.UserControls
 
         #endregion
 
-        private Krypton.Toolkit.KryptonTextBox stockField;
-        private Label label3;
+        private Krypton.Toolkit.KryptonTextBox quantityField;
+        private Label quantityLabel;
         private Label label1;
         private Krypton.Toolkit.KryptonComboBox movementReasonComboBox;
         private Panel buttonPanel;

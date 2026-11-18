@@ -103,6 +103,8 @@ namespace cc105_pose_proj.UserControls
             selectImgBtn.Location = new Point(178, 179);
             selectImgBtn.Margin = new Padding(5);
             selectImgBtn.Name = "selectImgBtn";
+            selectImgBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            selectImgBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             selectImgBtn.Size = new Size(113, 30);
             selectImgBtn.StateCommon.Back.Color1 = Color.Goldenrod;
             selectImgBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
@@ -220,6 +222,8 @@ namespace cc105_pose_proj.UserControls
             editStockBtn.Location = new Point(320, 35);
             editStockBtn.Margin = new Padding(5);
             editStockBtn.Name = "editStockBtn";
+            editStockBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            editStockBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             editStockBtn.Size = new Size(97, 31);
             editStockBtn.StateCommon.Back.Color1 = Color.Goldenrod;
             editStockBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
@@ -244,7 +248,6 @@ namespace cc105_pose_proj.UserControls
             stockField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             stockField.StateCommon.Content.Padding = new Padding(5);
             stockField.TabIndex = 3;
-            stockField.KeyPress += InputUtil.NumberOnly;
             // 
             // priceRowPanel
             // 
@@ -269,7 +272,6 @@ namespace cc105_pose_proj.UserControls
             priceField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             priceField.StateCommon.Content.Padding = new Padding(5);
             priceField.TabIndex = 2;
-            priceField.KeyPress += InputUtil.DecimalOnly;
             // 
             // nameRowPanel
             // 

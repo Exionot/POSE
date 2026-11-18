@@ -10,6 +10,7 @@ namespace cc105_pose_proj.UserControls
     {
         public event EventHandler<DialogResult>? RequestClose;
         private readonly BusinessService _businessService = new();
+        private readonly InventoryMovementService _movementService = new();
         private readonly Product? _product;
         public OpenProduct(Product? product)
         {
@@ -102,28 +103,19 @@ namespace cc105_pose_proj.UserControls
             }
         }
 
-        private void addStockBtn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(stockField.Text, out int stock))
-                return;
-            int newStock = stock + 1;
-
-            stockField.Text = newStock.ToString();
-        }
-
-        private void removeStockBtn_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(stockField.Text, out int stock))
-                return;
-            int newStock = (stock - 1) > 0 ? stock - 1 : 0;
-
-            stockField.Text = newStock.ToString();
-        }
-
         private void editStockBtn_Click(object sender, EventArgs e)
         {
-            int.TryParse(stockField.Text, out int stock);
-            PopupForm.Open(this, new EditStock(stock), "Edit Stock");
+            var editStock = new EditStock(_product!.Quantity);
+            DialogResult result = PopupForm.Open(this, editStock, "Edit Stock");
+
+            if (result == DialogResult.OK)
+            {
+                _movementService.RecordMovement(
+                    _product.Id,
+                    editStock.SelectedType,
+                    editStock.AdjustedQuantity
+                );
+            }
         }
     }
 }

@@ -51,18 +51,23 @@ namespace cc105_pose_proj.UserControls
                 panel.Visible = false;
             }
 
+            RefreshProducts();
+        }
+
+        private void RefreshProducts()
+        {
             List<Product> productList = _productService.GetProducts();
 
             allProductPanel.Controls.Clear();
             foreach (Product p in productList)
             {
                 Button btn = Buttons.CreateProductButton(new Button(), p);
-                btn.Click += (s, ev) => viewProduct(p);
+                btn.Click += (s, ev) => ViewProduct(p);
                 allProductPanel.Controls.Add(btn);
             }
         }
 
-        private void viewProduct(Product p)
+        private void ViewProduct(Product p)
         {
             selectedProduct = p;
             foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
@@ -84,9 +89,13 @@ namespace cc105_pose_proj.UserControls
             fixProductPanel();
         }
 
-        private void editProduct(Product p)
+        private void EditProduct(Product p)
         {
-            PopupForm.Open(this, new OpenProduct(p), p.Name);
+            if (PopupForm.Open(this, new OpenProduct(p), p.Name) == DialogResult.OK)
+            {
+                RefreshProducts();
+                ViewProduct(p);
+            }
         }
 
         private void fixProductPanel()
@@ -131,7 +140,7 @@ namespace cc105_pose_proj.UserControls
 
         private void editProductBtn_Click_1(object sender, EventArgs e)
         {
-            editProduct(selectedProduct);
+            EditProduct(selectedProduct);
         }
     }
 }
