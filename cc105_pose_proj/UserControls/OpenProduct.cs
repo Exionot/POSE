@@ -67,7 +67,7 @@ namespace cc105_pose_proj.UserControls
             priceField.Text = CurrentProduct.Price.ToString();
             stockField.Text = CurrentProduct.Quantity.ToString();
 
-            
+            NewImagePath = AppPaths.ResourceDir + CurrentProduct.Image;
         }
 
         private void OpenProduct_Resize(object sender, EventArgs e)
@@ -254,6 +254,8 @@ namespace cc105_pose_proj.UserControls
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
+            if (!HasUnsavedChanges()) return;
+
             if (!TryBuildProduct(out var product))
             {
                 MessageBox.Show("Could not save product. Check your input.", "Save Failed");
@@ -275,7 +277,7 @@ namespace cc105_pose_proj.UserControls
             MessageBox.Show(message, "Success");
             IsSaved = true;
             CurrentProduct = product;
-            NewImagePath = null;
+            NewImagePath = AppPaths.ResourceDir + product.Image;
         }
     }
 }
