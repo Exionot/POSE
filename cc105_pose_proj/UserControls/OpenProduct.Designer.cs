@@ -41,9 +41,7 @@
             businessRowPanel = new Panel();
             businessComboBox = new Krypton.Toolkit.KryptonComboBox();
             stockRowPanel = new Panel();
-            stockButtonPanel = new Panel();
-            removeStockBtn = new Krypton.Toolkit.KryptonButton();
-            addStockBtn = new Krypton.Toolkit.KryptonButton();
+            editStockBtn = new Krypton.Toolkit.KryptonButton();
             stockField = new Krypton.Toolkit.KryptonTextBox();
             priceRowPanel = new Panel();
             priceField = new Krypton.Toolkit.KryptonTextBox();
@@ -56,7 +54,6 @@
             businessRowPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)businessComboBox).BeginInit();
             stockRowPanel.SuspendLayout();
-            stockButtonPanel.SuspendLayout();
             priceRowPanel.SuspendLayout();
             nameRowPanel.SuspendLayout();
             SuspendLayout();
@@ -128,7 +125,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label4.Location = new Point(13, 10);
+            label4.Location = new Point(23, 10);
             label4.Name = "label4";
             label4.Size = new Size(75, 22);
             label4.TabIndex = 3;
@@ -138,7 +135,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label3.Location = new Point(13, 10);
+            label3.Location = new Point(23, 10);
             label3.Name = "label3";
             label3.Size = new Size(52, 22);
             label3.TabIndex = 2;
@@ -148,7 +145,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label2.Location = new Point(13, 10);
+            label2.Location = new Point(23, 10);
             label2.Name = "label2";
             label2.Size = new Size(48, 22);
             label2.TabIndex = 1;
@@ -158,7 +155,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            label1.Location = new Point(13, 10);
+            label1.Location = new Point(23, 10);
             label1.Name = "label1";
             label1.Size = new Size(114, 22);
             label1.TabIndex = 0;
@@ -184,7 +181,7 @@
             businessRowPanel.Controls.Add(label4);
             businessRowPanel.Location = new Point(3, 297);
             businessRowPanel.Name = "businessRowPanel";
-            businessRowPanel.Padding = new Padding(10);
+            businessRowPanel.Padding = new Padding(20, 10, 20, 10);
             businessRowPanel.Size = new Size(440, 100);
             businessRowPanel.TabIndex = 7;
             // 
@@ -192,10 +189,10 @@
             // 
             businessComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             businessComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            businessComboBox.Location = new Point(13, 35);
+            businessComboBox.Location = new Point(23, 35);
             businessComboBox.MinimumSize = new Size(0, 30);
             businessComboBox.Name = "businessComboBox";
-            businessComboBox.Size = new Size(414, 30);
+            businessComboBox.Size = new Size(394, 30);
             businessComboBox.StateCommon.ComboBox.Border.Rounding = 5F;
             businessComboBox.StateCommon.ComboBox.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             businessComboBox.StateCommon.ComboBox.Content.Padding = new Padding(5, -1, 15, -1);
@@ -206,72 +203,44 @@
             // stockRowPanel
             // 
             stockRowPanel.BackColor = SystemColors.Control;
-            stockRowPanel.Controls.Add(stockButtonPanel);
+            stockRowPanel.Controls.Add(editStockBtn);
             stockRowPanel.Controls.Add(stockField);
             stockRowPanel.Controls.Add(label3);
             stockRowPanel.Location = new Point(3, 201);
             stockRowPanel.Name = "stockRowPanel";
-            stockRowPanel.Padding = new Padding(10);
+            stockRowPanel.Padding = new Padding(20, 10, 20, 10);
             stockRowPanel.Size = new Size(440, 90);
             stockRowPanel.TabIndex = 6;
             // 
-            // stockButtonPanel
+            // editStockBtn
             // 
-            stockButtonPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            stockButtonPanel.Controls.Add(removeStockBtn);
-            stockButtonPanel.Controls.Add(addStockBtn);
-            stockButtonPanel.Location = new Point(350, 31);
-            stockButtonPanel.Name = "stockButtonPanel";
-            stockButtonPanel.Size = new Size(77, 37);
-            stockButtonPanel.TabIndex = 4;
-            // 
-            // removeStockBtn
-            // 
-            removeStockBtn.Location = new Point(41, 3);
-            removeStockBtn.Name = "removeStockBtn";
-            removeStockBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
-            removeStockBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            removeStockBtn.OverrideDefault.Border.Rounding = 5F;
-            removeStockBtn.Size = new Size(33, 31);
-            removeStockBtn.StateCommon.Back.Color1 = Color.Goldenrod;
-            removeStockBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            removeStockBtn.StateCommon.Border.Rounding = 5F;
-            removeStockBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            removeStockBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
-            removeStockBtn.TabIndex = 1;
-            removeStockBtn.Values.DropDownArrowColor = Color.Empty;
-            removeStockBtn.Values.Text = "-";
-            // 
-            // addStockBtn
-            // 
-            addStockBtn.Location = new Point(3, 3);
-            addStockBtn.Name = "addStockBtn";
-            addStockBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
-            addStockBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            addStockBtn.OverrideDefault.Border.Rounding = 5F;
-            addStockBtn.Size = new Size(33, 31);
-            addStockBtn.StateCommon.Back.Color1 = Color.Goldenrod;
-            addStockBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            addStockBtn.StateCommon.Border.Rounding = 5F;
-            addStockBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            addStockBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
-            addStockBtn.TabIndex = 0;
-            addStockBtn.Values.DropDownArrowColor = Color.Empty;
-            addStockBtn.Values.Text = "+";
+            editStockBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            editStockBtn.Location = new Point(320, 35);
+            editStockBtn.Margin = new Padding(5);
+            editStockBtn.Name = "editStockBtn";
+            editStockBtn.Size = new Size(97, 31);
+            editStockBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            editStockBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            editStockBtn.StateCommon.Border.Rounding = 5F;
+            editStockBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            editStockBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            editStockBtn.TabIndex = 2;
+            editStockBtn.Values.DropDownArrowColor = Color.Empty;
+            editStockBtn.Values.Text = "Edit Stock";
             // 
             // stockField
             // 
             stockField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            stockField.Location = new Point(13, 35);
+            stockField.Enabled = false;
+            stockField.Location = new Point(23, 35);
             stockField.Name = "stockField";
-            stockField.Size = new Size(331, 33);
+            stockField.Size = new Size(289, 31);
             stockField.StateCommon.Border.Color1 = SystemColors.ControlDark;
             stockField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             stockField.StateCommon.Border.Rounding = 5F;
             stockField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             stockField.StateCommon.Content.Padding = new Padding(5);
             stockField.TabIndex = 3;
-            stockField.Text = "kryptonTextBox2";
             stockField.KeyPress += NumberOnly;
             // 
             // priceRowPanel
@@ -281,23 +250,22 @@
             priceRowPanel.Controls.Add(label2);
             priceRowPanel.Location = new Point(3, 109);
             priceRowPanel.Name = "priceRowPanel";
-            priceRowPanel.Padding = new Padding(10);
+            priceRowPanel.Padding = new Padding(20, 10, 20, 10);
             priceRowPanel.Size = new Size(440, 86);
             priceRowPanel.TabIndex = 5;
             // 
             // priceField
             // 
             priceField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            priceField.Location = new Point(13, 35);
+            priceField.Location = new Point(23, 35);
             priceField.Name = "priceField";
-            priceField.Size = new Size(414, 33);
+            priceField.Size = new Size(394, 31);
             priceField.StateCommon.Border.Color1 = SystemColors.ControlDark;
             priceField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             priceField.StateCommon.Border.Rounding = 5F;
             priceField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             priceField.StateCommon.Content.Padding = new Padding(5);
             priceField.TabIndex = 2;
-            priceField.Text = "kryptonTextBox2";
             priceField.KeyPress += NumberOnly;
             // 
             // nameRowPanel
@@ -307,23 +275,22 @@
             nameRowPanel.Controls.Add(label1);
             nameRowPanel.Location = new Point(3, 3);
             nameRowPanel.Name = "nameRowPanel";
-            nameRowPanel.Padding = new Padding(10);
+            nameRowPanel.Padding = new Padding(20, 10, 20, 10);
             nameRowPanel.Size = new Size(440, 83);
             nameRowPanel.TabIndex = 4;
             // 
             // nameField
             // 
             nameField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            nameField.Location = new Point(13, 35);
+            nameField.Location = new Point(23, 35);
             nameField.Name = "nameField";
-            nameField.Size = new Size(414, 33);
+            nameField.Size = new Size(394, 31);
             nameField.StateCommon.Border.Color1 = SystemColors.ControlDark;
             nameField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             nameField.StateCommon.Border.Rounding = 5F;
             nameField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             nameField.StateCommon.Content.Padding = new Padding(5);
             nameField.TabIndex = 1;
-            nameField.Text = "kryptonTextBox1";
             // 
             // OpenProduct
             // 
@@ -345,7 +312,6 @@
             ((System.ComponentModel.ISupportInitialize)businessComboBox).EndInit();
             stockRowPanel.ResumeLayout(false);
             stockRowPanel.PerformLayout();
-            stockButtonPanel.ResumeLayout(false);
             priceRowPanel.ResumeLayout(false);
             priceRowPanel.PerformLayout();
             nameRowPanel.ResumeLayout(false);
@@ -371,10 +337,8 @@
         private Panel stockRowPanel;
         private Panel priceRowPanel;
         private Krypton.Toolkit.KryptonTextBox priceField;
-        private Panel stockButtonPanel;
-        private Krypton.Toolkit.KryptonButton removeStockBtn;
-        private Krypton.Toolkit.KryptonButton addStockBtn;
         private Krypton.Toolkit.KryptonTextBox stockField;
         private Krypton.Toolkit.KryptonComboBox businessComboBox;
+        private Krypton.Toolkit.KryptonButton editStockBtn;
     }
 }

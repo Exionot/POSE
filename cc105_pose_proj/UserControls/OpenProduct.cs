@@ -47,7 +47,7 @@ namespace cc105_pose_proj.UserControls
                     .FirstOrDefault(b => b.Id == targetBusinessId.Value);
             }
 
-            businessRowPanel.Enabled = user.IsAdmin;
+            businessComboBox.Enabled = user.IsAdmin;
 
             if (_product == null)
                 return;
@@ -108,6 +108,24 @@ namespace cc105_pose_proj.UserControls
             {
                 e.Handled = true;
             }
+        }
+
+        private void addStockBtn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(stockField.Text, out int stock))
+                return;
+            int newStock = stock + 1;
+
+            stockField.Text = newStock.ToString();
+        }
+
+        private void removeStockBtn_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(stockField.Text, out int stock))
+                return;
+            int newStock = (stock - 1) > 0 ? stock-1 : 0;
+
+            stockField.Text = newStock.ToString();
         }
     }
 }
