@@ -72,6 +72,8 @@ namespace cc105_pose_proj.UserControls
 
         private void OpenProduct_Resize(object sender, EventArgs e)
         {
+            bool isEditMode = CurrentProduct != null;
+
             headerPanel.Height = (int)(this.Height * 0.1);
             imagePanel.Height = (int)(this.Height * 0.4);
             infoPanel.Height = (int)(this.Height * 0.5);
@@ -88,7 +90,7 @@ namespace cc105_pose_proj.UserControls
             saveBtn.Left = headerPanel.Right - backButtonMargin - saveBtn.Width;
             deleteBtn.Left = saveBtn.Left - saveBtn.Margin.Left - deleteBtn.Width;
 
-            deleteBtn.Visible = Session.CurrentUser!.IsAdmin;
+            deleteBtn.Visible = (Session.CurrentUser!.IsAdmin || CurrentProduct?.Id == Session.CurrentUser.Business?.Id) && isEditMode;
 
             int pictureBoxSize = imagePanel.Height - selectImgBtn.Height -
                 (selectImgBtn.Margin.Top + selectImgBtn.Margin.Bottom);
@@ -117,7 +119,7 @@ namespace cc105_pose_proj.UserControls
                 infoPanelTop += rowPanel.Height;
             }
 
-            bool isEditMode = CurrentProduct != null;
+            
             stockField.Enabled = !isEditMode;
             if (!isEditMode)
             {
