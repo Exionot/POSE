@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             kryptonPanel1 = new Krypton.Toolkit.KryptonPanel();
             profilePanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
+            settingBtn = new Krypton.Toolkit.KryptonButton();
+            logoutBtn = new Krypton.Toolkit.KryptonButton();
             userProfilePictureBox = new PictureBox();
             mainButtonPanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
             manageDiscountBtn = new Krypton.Toolkit.KryptonButton();
@@ -38,8 +40,6 @@
             viewSalesBtn = new Krypton.Toolkit.KryptonButton();
             manageProductBtn = new Krypton.Toolkit.KryptonButton();
             newTransactionBtn = new Krypton.Toolkit.KryptonButton();
-            logoutBtn = new Krypton.Toolkit.KryptonButton();
-            settingBtn = new Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel1).BeginInit();
             kryptonPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)profilePanel).BeginInit();
@@ -73,6 +73,41 @@
             profilePanel.Size = new Size(812, 70);
             profilePanel.StateCommon.Color1 = SystemColors.Control;
             profilePanel.TabIndex = 1;
+            // 
+            // settingBtn
+            // 
+            settingBtn.Location = new Point(652, 15);
+            settingBtn.Margin = new Padding(0, 10, 0, 10);
+            settingBtn.Name = "settingBtn";
+            settingBtn.OverrideDefault.Back.Color1 = SystemColors.ControlDarkDark;
+            settingBtn.Size = new Size(40, 40);
+            settingBtn.StateCommon.Back.Color1 = SystemColors.ControlDarkDark;
+            settingBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            settingBtn.StateCommon.Back.ImageAlign = Krypton.Toolkit.PaletteRectangleAlign.Control;
+            settingBtn.StateCommon.Back.ImageStyle = Krypton.Toolkit.PaletteImageStyle.CenterMiddle;
+            settingBtn.StateCommon.Border.Rounding = 10F;
+            settingBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            settingBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Bold);
+            settingBtn.TabIndex = 2;
+            settingBtn.Values.DropDownArrowColor = Color.Empty;
+            settingBtn.Values.Text = "";
+            // 
+            // logoutBtn
+            // 
+            logoutBtn.Location = new Point(702, 15);
+            logoutBtn.Margin = new Padding(10, 10, 0, 10);
+            logoutBtn.Name = "logoutBtn";
+            logoutBtn.OverrideDefault.Back.Color1 = Color.Brown;
+            logoutBtn.Size = new Size(80, 40);
+            logoutBtn.StateCommon.Back.Color1 = Color.Brown;
+            logoutBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            logoutBtn.StateCommon.Border.Rounding = 10F;
+            logoutBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            logoutBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Bold);
+            logoutBtn.TabIndex = 1;
+            logoutBtn.Values.DropDownArrowColor = Color.Empty;
+            logoutBtn.Values.Text = "Logout";
+            logoutBtn.Click += logoutBtn_Click;
             // 
             // userProfilePictureBox
             // 
@@ -139,6 +174,7 @@
             viewMovementBtn.TabIndex = 3;
             viewMovementBtn.Values.DropDownArrowColor = Color.Empty;
             viewMovementBtn.Values.Text = "Inventory";
+            viewMovementBtn.Click += viewMovementBtn_Click;
             // 
             // viewSalesBtn
             // 
@@ -197,39 +233,7 @@
             newTransactionBtn.TabIndex = 0;
             newTransactionBtn.Values.DropDownArrowColor = Color.Empty;
             newTransactionBtn.Values.Text = "New\r\nTransaction\r\n";
-            // 
-            // logoutBtn
-            // 
-            logoutBtn.Location = new Point(702, 15);
-            logoutBtn.Margin = new Padding(10, 10, 0, 10);
-            logoutBtn.Name = "logoutBtn";
-            logoutBtn.OverrideDefault.Back.Color1 = Color.Brown;
-            logoutBtn.Size = new Size(80, 40);
-            logoutBtn.StateCommon.Back.Color1 = Color.Brown;
-            logoutBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            logoutBtn.StateCommon.Border.Rounding = 10F;
-            logoutBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            logoutBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Bold);
-            logoutBtn.TabIndex = 1;
-            logoutBtn.Values.DropDownArrowColor = Color.Empty;
-            logoutBtn.Values.Text = "Logout";
-            logoutBtn.Click += logoutBtn_Click;
-            // 
-            // settingBtn
-            // 
-            settingBtn.Location = new Point(652, 15);
-            settingBtn.Margin = new Padding(0, 10, 0, 10);
-            settingBtn.Name = "settingBtn";
-            settingBtn.OverrideDefault.Back.Color1 = SystemColors.ControlDarkDark;
-            settingBtn.Size = new Size(40, 40);
-            settingBtn.StateCommon.Back.Color1 = SystemColors.ControlDarkDark;
-            settingBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            settingBtn.StateCommon.Border.Rounding = 10F;
-            settingBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
-            settingBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Bold);
-            settingBtn.TabIndex = 2;
-            settingBtn.Values.DropDownArrowColor = Color.Empty;
-            settingBtn.Values.Text = "";
+            newTransactionBtn.Click += newTransactionBtn_Click;
             // 
             // Home
             // 

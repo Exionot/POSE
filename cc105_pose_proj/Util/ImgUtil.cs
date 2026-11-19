@@ -1,8 +1,9 @@
 ﻿using Krypton.Toolkit;
+using System.Windows.Forms;
 
 namespace cc105_pose_proj.Util
 {
-    public class ImgUtil
+    public static class ImgUtil
     {
         private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
@@ -53,10 +54,12 @@ namespace cc105_pose_proj.Util
             }
         }
 
-        public static void FitIcon(KryptonButton btn, Image src)
+        public static void FitIcon(this KryptonButton btn, Image src, int padding = 0)
         {
-            int box = Math.Max(1, btn.Height);
-            float s = Math.Min((float)box / src.Width, (float)box / src.Height);
+            int box = Math.Max(1, Math.Min(btn.Width, btn.Height) - padding * 2);
+            float s = Math.Min(
+                (float)Math.Max(1, box) / src.Width,
+                (float)Math.Max(1, box) / src.Height);
             int w = Math.Max(1, (int)(src.Width * s));
             int h = Math.Max(1, (int)(src.Height * s));
 

@@ -1,5 +1,7 @@
 ﻿using cc105_pose_proj.Navigation;
+using cc105_pose_proj.Properties;
 using cc105_pose_proj.Services;
+using cc105_pose_proj.Util;
 using Krypton.Toolkit;
 using Timer = System.Windows.Forms.Timer;
 
@@ -16,6 +18,8 @@ namespace cc105_pose_proj.UserControls
 
         private void Home_Load(object sender, EventArgs e)
         {
+            settingBtn.FitIcon(Resources.setting_icon, 7);
+
             foreach (var btn in mainButtonPanel.Controls.OfType<KryptonButton>())
             {
                 int originalWidth = btn.Width;
@@ -27,7 +31,7 @@ namespace cc105_pose_proj.UserControls
                 int originalLeft = btn.Left;
                 int originalTop = btn.Top;
 
-                Timer btnAnimate = new ();
+                Timer btnAnimate = new();
                 int expandAmount = 20;
                 btnAnimate.Interval = 15;
 
@@ -76,20 +80,6 @@ namespace cc105_pose_proj.UserControls
             profilePanel.Left = (this.ClientSize.Width - profilePanel.Width) / 2;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            _nav.NavigateTo(new Inventory(_nav));
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            _nav.NavigateTo(new MainTransaction(_nav));
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            new Form2().ShowDialog();
-        }
 
         private void logoutBtn_Click(object sender, EventArgs e)
         {
@@ -108,6 +98,16 @@ namespace cc105_pose_proj.UserControls
                 AuthService.Logout();
                 _nav.NavigateTo(new Login(_nav));
             }
+        }
+
+        private void newTransactionBtn_Click(object sender, EventArgs e)
+        {
+            _nav.NavigateTo(new MainTransaction(_nav));
+        }
+
+        private void viewMovementBtn_Click(object sender, EventArgs e)
+        {
+            _nav.NavigateTo(new Inventory(_nav));
         }
     }
 }

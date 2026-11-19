@@ -28,7 +28,7 @@ namespace cc105_pose_proj
 
         private void Login_Load(object sender, EventArgs e)
         {
-            ImgUtil.FitIcon(exitBtn, Properties.Resources.image);
+            exitBtn.FitIcon(Properties.Resources.image);
             usernameField.Focus();
         }
 
