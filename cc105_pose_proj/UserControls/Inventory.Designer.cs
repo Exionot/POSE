@@ -97,7 +97,7 @@
             // 
             // leftPanel
             // 
-            leftPanel.BackColor = Color.Red;
+            leftPanel.BackColor = SystemColors.Control;
             leftPanel.Controls.Add(productExtraPanel);
             leftPanel.Controls.Add(productInfoPanel);
             leftPanel.Controls.Add(productActionPanel);
@@ -288,6 +288,7 @@
             // 
             // productActionPanel
             // 
+            productActionPanel.BackColor = SystemColors.Control;
             productActionPanel.Controls.Add(editProductBtn);
             productActionPanel.Dock = DockStyle.Top;
             productActionPanel.Location = new Point(0, 0);
@@ -297,9 +298,17 @@
             // 
             // editProductBtn
             // 
-            editProductBtn.Location = new Point(318, 35);
+            editProductBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            editProductBtn.Location = new Point(311, 15);
             editProductBtn.Name = "editProductBtn";
-            editProductBtn.Size = new Size(90, 25);
+            editProductBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            editProductBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            editProductBtn.Size = new Size(97, 31);
+            editProductBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            editProductBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            editProductBtn.StateCommon.Border.Rounding = 5F;
+            editProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            editProductBtn.StateCommon.Content.ShortText.Font = new Font("Inter Black", 9F, FontStyle.Bold);
             editProductBtn.TabIndex = 4;
             editProductBtn.Values.DropDownArrowColor = Color.Empty;
             editProductBtn.Values.Text = "Edit";
@@ -329,12 +338,19 @@
             // newProductBtn
             // 
             newProductBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            newProductBtn.Location = new Point(367, 35);
+            newProductBtn.Location = new Point(421, 15);
             newProductBtn.Name = "newProductBtn";
-            newProductBtn.Size = new Size(90, 25);
+            newProductBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            newProductBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            newProductBtn.Size = new Size(31, 31);
+            newProductBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            newProductBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            newProductBtn.StateCommon.Border.Rounding = 5F;
+            newProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            newProductBtn.StateCommon.Content.ShortText.Font = new Font("Inter Black", 9F, FontStyle.Bold);
             newProductBtn.TabIndex = 2;
             newProductBtn.Values.DropDownArrowColor = Color.Empty;
-            newProductBtn.Values.Text = "kryptonButton1";
+            newProductBtn.Values.Text = "+";
             newProductBtn.Click += newProductBtn_Click;
             // 
             // productLabel

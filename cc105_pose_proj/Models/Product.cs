@@ -1,4 +1,6 @@
-﻿namespace cc105_pose_proj.Models
+﻿using cc105_pose_proj.Util;
+
+namespace cc105_pose_proj.Models
 {
     public class Product
     {
@@ -7,7 +9,7 @@
         public required int Quantity { get; set; }
         public required decimal Price { get; set; }
         public required Business Business { get; set; }
-        public required string Image {  get; set; }
+        public string Image { get; set; } = AppPaths.ResourceDir + "Default.png";
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

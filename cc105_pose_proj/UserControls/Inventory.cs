@@ -2,6 +2,7 @@
 using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
+using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.UserControls
@@ -9,7 +10,7 @@ namespace cc105_pose_proj.UserControls
     public partial class Inventory : UserControl
     {
         private readonly INavigator _nav;
-        private readonly IRepository<Product> _productRepo = new ProductRepository();
+        private readonly ProductService _productService = new();
         private Product selectedProduct = null!;
         public Inventory(INavigator nav)
         {
@@ -50,24 +51,32 @@ namespace cc105_pose_proj.UserControls
                 panel.Visible = false;
             }
 
-            List<Product> productList = _productRepo.GetAll();
+            RefreshProducts();
+        }
+
+        private void RefreshProducts()
+        {
+            List<Product> productList = _productService.GetProducts();
 
             allProductPanel.Controls.Clear();
             foreach (Product p in productList)
             {
                 Button btn = Buttons.CreateProductButton(new Button(), p);
-                btn.Click += (s, ev) => viewProduct(p);
+                btn.Click += (s, ev) => ViewProduct(p);
                 allProductPanel.Controls.Add(btn);
             }
         }
 
-        private void viewProduct(Product p)
+        private void ViewProduct(Product? p)
         {
             selectedProduct = p;
             foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
             {
-                panel.Visible = true;
+                panel.Visible = p is not null;
             }
+
+            if (p == null)
+                return;
 
             Image img = Image.FromFile(AppPaths.ResourceDir + p.Image);
             productPictureBox.Image = (Image)img.Clone();
@@ -83,9 +92,14 @@ namespace cc105_pose_proj.UserControls
             fixProductPanel();
         }
 
-        private void editProduct(Product p)
+        private void EditProduct(Product p)
         {
             PopupForm.Open(this, new OpenProduct(p), p.Name);
+
+            RefreshProducts();
+
+            var updatedProduct = _productService.GetProductById(p.Id);
+            ViewProduct(updatedProduct);
         }
 
         private void fixProductPanel()
@@ -125,12 +139,14 @@ namespace cc105_pose_proj.UserControls
 
         private void newProductBtn_Click(object sender, EventArgs e)
         {
+            PopupForm.Open(this, new OpenProduct(), "New Product");
 
+            RefreshProducts();
         }
 
         private void editProductBtn_Click_1(object sender, EventArgs e)
         {
-            editProduct(selectedProduct);
+            EditProduct(selectedProduct);
         }
     }
 }

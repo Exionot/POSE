@@ -43,8 +43,9 @@ namespace cc105_pose_proj.Services
             return _movementRepo.GetByProductId(productId);
         }
 
-        public bool RecordMovement(int productId, MovementType type, int quantity)
+        public bool RecordMovement(int productId, MovementType type, int quantity, out int movementId)
         {
+            movementId = -1;
             if (CurrentUser == null) return false;
             if (quantity <= 0) return false;
 
@@ -55,24 +56,22 @@ namespace cc105_pose_proj.Services
             if (!isAddition && product.Quantity < quantity)
                 return false;
 
-            int newStock = isAddition
-                ? product.Quantity + quantity
-                : product.Quantity - quantity;
-
-            product.Quantity = newStock;
-            if (!_productService.UpdateProduct(product))
-                return false;
-
             var movement = new InventoryMovement
             {
                 Product = product,
                 Type = type,
                 Quantity = quantity,
-                CreatedBy = CurrentUser,
-                CreatedAt = DateTime.UtcNow
+                CreatedBy = CurrentUser
             };
 
-            return _movementRepo.Add(movement);
+            bool movementAdded = _movementRepo.Add(movement);
+            movementId = movement.Id;
+            return movementAdded;
+        }
+
+        public bool DeleteMovement(int id)
+        {
+            return _movementRepo.Delete(id);
         }
 
         private static bool IsAddition(MovementType type)
@@ -84,6 +83,13 @@ namespace cc105_pose_proj.Services
                 MovementType.RETURN => true,
                 _ => false
             };
+        }
+
+        public int CalculateNewStock(int currentStock, int quantity, MovementType type)
+        {
+            return IsAddition(type)
+                ? currentStock + quantity
+                : currentStock - quantity;
         }
     }
 }
