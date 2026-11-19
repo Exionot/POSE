@@ -67,13 +67,16 @@ namespace cc105_pose_proj.UserControls
             }
         }
 
-        private void ViewProduct(Product p)
+        private void ViewProduct(Product? p)
         {
             selectedProduct = p;
             foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
             {
-                panel.Visible = true;
+                panel.Visible = p is not null;
             }
+
+            if (p == null)
+                return;
 
             Image img = Image.FromFile(AppPaths.ResourceDir + p.Image);
             productPictureBox.Image = (Image)img.Clone();
@@ -96,7 +99,7 @@ namespace cc105_pose_proj.UserControls
             RefreshProducts();
 
             var updatedProduct = _productService.GetProductById(p.Id);
-            ViewProduct(updatedProduct!);
+            ViewProduct(updatedProduct);
         }
 
         private void fixProductPanel()

@@ -4,6 +4,7 @@ using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 using Krypton.Toolkit;
 using System.Globalization;
+using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace cc105_pose_proj.UserControls
@@ -119,7 +120,7 @@ namespace cc105_pose_proj.UserControls
                 infoPanelTop += rowPanel.Height;
             }
 
-            
+
             stockField.Enabled = !isEditMode;
             if (!isEditMode)
             {
@@ -280,6 +281,29 @@ namespace cc105_pose_proj.UserControls
             IsSaved = true;
             CurrentProduct = product;
             NewImagePath = AppPaths.ResourceDir + product.Image;
+        }
+
+        private void deleteBtn_Click(object sender, EventArgs e)
+        {
+            if (CurrentProduct == null) return;
+
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this product? This action is ireversable.", 
+                "Delete Product",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Exclamation);
+
+            if (result == DialogResult.OK)
+            {
+                if (!_productService.DeleteProduct(CurrentProduct.Id))
+                {
+                    MessageBox.Show("Product delete failed", "Delete");
+                    return;
+                }
+
+                MessageBox.Show("Product deletion success!", "Success");
+                RequestClose?.Invoke(this, DialogResult.OK);
+            }
         }
     }
 }

@@ -91,6 +91,7 @@ namespace cc105_pose_proj.UserControls
             deleteBtn.TabIndex = 3;
             deleteBtn.Values.DropDownArrowColor = Color.Empty;
             deleteBtn.Values.Text = "Delete";
+            deleteBtn.Click += deleteBtn_Click;
             // 
             // saveBtn
             // 
