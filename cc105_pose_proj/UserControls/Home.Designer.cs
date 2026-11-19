@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             kryptonPanel1 = new Krypton.Toolkit.KryptonPanel();
             profilePanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
+            businessNameLabel = new Label();
             settingBtn = new Krypton.Toolkit.KryptonButton();
             logoutBtn = new Krypton.Toolkit.KryptonButton();
             userProfilePictureBox = new PictureBox();
@@ -62,6 +62,7 @@
             // 
             // profilePanel
             // 
+            profilePanel.Controls.Add(businessNameLabel);
             profilePanel.Controls.Add(settingBtn);
             profilePanel.Controls.Add(logoutBtn);
             profilePanel.Controls.Add(userProfilePictureBox);
@@ -73,6 +74,17 @@
             profilePanel.Size = new Size(812, 70);
             profilePanel.StateCommon.Color1 = SystemColors.Control;
             profilePanel.TabIndex = 1;
+            // 
+            // businessNameLabel
+            // 
+            businessNameLabel.AutoSize = true;
+            businessNameLabel.Font = new Font("Inter", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            businessNameLabel.Location = new Point(95, 20);
+            businessNameLabel.Margin = new Padding(5, 0, 0, 0);
+            businessNameLabel.Name = "businessNameLabel";
+            businessNameLabel.Size = new Size(82, 35);
+            businessNameLabel.TabIndex = 3;
+            businessNameLabel.Text = "label1";
             // 
             // settingBtn
             // 
@@ -111,8 +123,7 @@
             // 
             // userProfilePictureBox
             // 
-            userProfilePictureBox.BackColor = SystemColors.ControlDark;
-            userProfilePictureBox.Image = (Image)resources.GetObject("userProfilePictureBox.Image");
+            userProfilePictureBox.BackColor = Color.Transparent;
             userProfilePictureBox.Location = new Point(33, 8);
             userProfilePictureBox.Name = "userProfilePictureBox";
             userProfilePictureBox.Size = new Size(54, 54);
@@ -146,10 +157,10 @@
             manageDiscountBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             manageDiscountBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageDiscountBtn.Size = new Size(148, 110);
-            manageDiscountBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            manageDiscountBtn.StateCommon.Back.Color1 = Color.Khaki;
             manageDiscountBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageDiscountBtn.StateCommon.Border.Rounding = 10F;
-            manageDiscountBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            manageDiscountBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
             manageDiscountBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             manageDiscountBtn.StateCommon.Content.ShortText.MultiLineH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             manageDiscountBtn.TabIndex = 4;
@@ -166,10 +177,10 @@
             viewMovementBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             viewMovementBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewMovementBtn.Size = new Size(320, 110);
-            viewMovementBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            viewMovementBtn.StateCommon.Back.Color1 = Color.Khaki;
             viewMovementBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewMovementBtn.StateCommon.Border.Rounding = 10F;
-            viewMovementBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            viewMovementBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
             viewMovementBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             viewMovementBtn.TabIndex = 3;
             viewMovementBtn.Values.DropDownArrowColor = Color.Empty;
@@ -186,10 +197,10 @@
             viewSalesBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             viewSalesBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewSalesBtn.Size = new Size(320, 110);
-            viewSalesBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            viewSalesBtn.StateCommon.Back.Color1 = Color.Khaki;
             viewSalesBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewSalesBtn.StateCommon.Border.Rounding = 10F;
-            viewSalesBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            viewSalesBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
             viewSalesBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             viewSalesBtn.TabIndex = 2;
             viewSalesBtn.Values.DropDownArrowColor = Color.Empty;
@@ -205,10 +216,10 @@
             manageProductBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             manageProductBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageProductBtn.Size = new Size(148, 110);
-            manageProductBtn.StateCommon.Back.Color1 = Color.Goldenrod;
+            manageProductBtn.StateCommon.Back.Color1 = Color.Khaki;
             manageProductBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageProductBtn.StateCommon.Border.Rounding = 10F;
-            manageProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            manageProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
             manageProductBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             manageProductBtn.TabIndex = 1;
             manageProductBtn.Values.DropDownArrowColor = Color.Empty;
@@ -251,6 +262,7 @@
             kryptonPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)profilePanel).EndInit();
             profilePanel.ResumeLayout(false);
+            profilePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)userProfilePictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)mainButtonPanel).EndInit();
             mainButtonPanel.ResumeLayout(false);
@@ -270,5 +282,6 @@
         private PictureBox userProfilePictureBox;
         private Krypton.Toolkit.KryptonButton logoutBtn;
         private Krypton.Toolkit.KryptonButton settingBtn;
+        private Label businessNameLabel;
     }
 }

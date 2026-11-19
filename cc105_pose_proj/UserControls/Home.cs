@@ -20,6 +20,16 @@ namespace cc105_pose_proj.UserControls
         {
             settingBtn.FitIcon(Resources.setting_icon, 7);
 
+
+            var user = Session.CurrentUser;
+            if (user != null) 
+            {
+                businessNameLabel.Text = user.Business != null ? user.Business.Name : user.Username;
+                userProfilePictureBox.Image = Image.FromFile(AppPaths.ResourceDir + user.Image);
+            }
+
+            businessNameLabel.Top = (profilePanel.Height - businessNameLabel.Height) / 2;
+
             foreach (var btn in mainButtonPanel.Controls.OfType<KryptonButton>())
             {
                 int originalWidth = btn.Width;

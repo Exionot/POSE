@@ -9,6 +9,7 @@ namespace cc105_pose_proj.Data.Mappers
             u.id as user_id,
             u.username as username,
             u.is_admin as is_admin,
+            u.image as user_image,
             ub.id as business_id,
             ub.name as business_name
         ";
@@ -32,6 +33,7 @@ namespace cc105_pose_proj.Data.Mappers
                 Id = reader.GetInt32("user_id"),
                 Username = reader.GetString("username"),
                 IsAdmin = reader.GetBoolean("is_admin"),
+                Image = reader.GetString("user_image"),
                 Business = business
             };
         }

@@ -16,6 +16,7 @@ namespace cc105_pose_proj.Services
                                 u.id as user_id, 
                                 u.password as password,
                                 u.is_admin as is_admin, 
+                                u.image as image,
                                 b.id as business_id, 
                                 b.name as business_name 
                             from users as u left join business as b on u.id = b.user_id 
@@ -34,6 +35,8 @@ namespace cc105_pose_proj.Services
 
             int userId = reader.GetInt32("user_id");
             bool isAdmin = reader.GetBoolean("is_admin");
+            string image = reader.GetString("image");
+
             int? businessId = reader.IsDBNull(reader.GetOrdinal("business_id"))
                 ? null
                 : reader.GetInt32("business_id");
@@ -55,7 +58,8 @@ namespace cc105_pose_proj.Services
                 Id = userId,
                 Username = username,
                 Business = business,
-                IsAdmin = isAdmin
+                IsAdmin = isAdmin,
+                Image = image
             }; 
         }
 

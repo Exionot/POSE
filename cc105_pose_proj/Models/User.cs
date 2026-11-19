@@ -6,5 +6,6 @@
         public required string Username { get; set; }
         public Business? Business { get; set; }
         public required bool IsAdmin { get; set; }
+        public string Image { get; set; } = "Default.png";
     }
 }
