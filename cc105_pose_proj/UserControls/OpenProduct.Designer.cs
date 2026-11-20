@@ -292,6 +292,7 @@ namespace cc105_pose_proj.UserControls
             stockField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             stockField.StateCommon.Content.Padding = new Padding(5);
             stockField.TabIndex = 3;
+            stockField.KeyPress += InputUtil.NumberOnly;
             // 
             // priceRowPanel
             // 
@@ -316,6 +317,7 @@ namespace cc105_pose_proj.UserControls
             priceField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             priceField.StateCommon.Content.Padding = new Padding(5);
             priceField.TabIndex = 2;
+            priceField.KeyPress += InputUtil.DecimalOnly;
             // 
             // nameRowPanel
             // 
