@@ -78,6 +78,7 @@
             // 
             // itemsFlowPanel
             // 
+            itemsFlowPanel.AutoScroll = true;
             itemsFlowPanel.Location = new Point(13, 106);
             itemsFlowPanel.Name = "itemsFlowPanel";
             itemsFlowPanel.Size = new Size(324, 31);
@@ -86,13 +87,14 @@
             // editBtn
             // 
             editBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            editBtn.Location = new Point(295, 13);
+            editBtn.Location = new Point(287, 13);
             editBtn.Name = "editBtn";
             editBtn.OverrideDefault.Back.Color1 = Color.Goldenrod;
             editBtn.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            editBtn.Size = new Size(42, 27);
+            editBtn.Size = new Size(50, 30);
             editBtn.StateCommon.Back.Color1 = Color.Goldenrod;
             editBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            editBtn.StateCommon.Border.Rounding = 5F;
             editBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
             editBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             editBtn.TabIndex = 5;
@@ -110,6 +112,7 @@
             Controls.Add(valueLabel);
             Controls.Add(typeLabel);
             Controls.Add(nameLabel);
+            Margin = new Padding(7);
             Name = "DiscountTicket";
             Padding = new Padding(10);
             Size = new Size(350, 150);
