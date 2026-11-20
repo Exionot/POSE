@@ -1,4 +1,5 @@
-﻿using cc105_pose_proj.Models;
+﻿using cc105_pose_proj.Forms;
+using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
 using cc105_pose_proj.Services;
 
@@ -19,7 +20,9 @@ namespace cc105_pose_proj.UserControls
             discountTicketFlowPanel.Controls.Clear();
             foreach (Discount d in _discountService.GetDiscounts())
             {
-                discountTicketFlowPanel.Controls.Add(new DiscountTicket(d, 160));
+                var ticket = new DiscountTicket(d, 160);
+                ticket.editBtn.Click += (_, _) => EditDiscount(d);
+                discountTicketFlowPanel.Controls.Add(ticket);
             }
         }
 
@@ -46,6 +49,11 @@ namespace cc105_pose_proj.UserControls
         private void backBtn_Click(object sender, EventArgs e)
         {
             _nav.NavigateTo(new Home(_nav));
+        }
+
+        private void EditDiscount(Discount d)
+        {
+            PopupForm.Open(this, new EditDiscount(d), d.Name);
         }
     }
 }

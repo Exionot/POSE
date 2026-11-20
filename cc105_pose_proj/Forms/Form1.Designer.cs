@@ -83,6 +83,8 @@
             // button2
             // 
             button2.BackgroundImageLayout = ImageLayout.Zoom;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
             button2.Location = new Point(367, 26);
             button2.Name = "button2";
             button2.Size = new Size(134, 49);

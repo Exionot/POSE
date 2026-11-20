@@ -129,6 +129,6 @@
         private Label valueLabel;
         private Label appliedToLabel;
         private FlowLayoutPanel itemsFlowPanel;
-        private Krypton.Toolkit.KryptonButton editBtn;
+        public Krypton.Toolkit.KryptonButton editBtn;
     }
 }

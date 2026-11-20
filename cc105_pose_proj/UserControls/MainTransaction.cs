@@ -69,7 +69,7 @@ namespace cc105_pose_proj
                 Button btn = new();
                 try
                 {
-                    Buttons.CreateProductButton(btn, p);
+                    btn = Buttons.CreateProductButton(p);
                 }
                 catch (Exception ex) when (ex is IOException or ArgumentException)
                 {
