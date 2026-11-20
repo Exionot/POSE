@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using cc105_pose_proj.Navigation;
+using cc105_pose_proj.Properties;
+using cc105_pose_proj.Services;
+using cc105_pose_proj.Util;
+using Krypton.Toolkit;
+using Timer = System.Windows.Forms.Timer;
 
 namespace cc105_pose_proj.UserControls
 {
-    using cc105_pose_proj.Models;
-    using cc105_pose_proj.Navigation;
-    using cc105_pose_proj.Services;
-    using cc105_pose_proj.Util;
-    using System.Windows.Forms;
     public partial class Home : UserControl
     {
         private readonly INavigator _nav;
@@ -25,7 +18,19 @@ namespace cc105_pose_proj.UserControls
 
         private void Home_Load(object sender, EventArgs e)
         {
-            foreach (Button btn in panel1.Controls.OfType<Button>())
+            settingBtn.FitIcon(Resources.setting_icon, 7);
+
+
+            var user = Session.CurrentUser;
+            if (user != null) 
+            {
+                businessNameLabel.Text = user.Business != null ? user.Business.Name : user.Username;
+                userProfilePictureBox.Image = Image.FromFile(AppPaths.ResourceDir + user.Image);
+            }
+
+            businessNameLabel.Top = (profilePanel.Height - businessNameLabel.Height) / 2;
+
+            foreach (var btn in mainButtonPanel.Controls.OfType<KryptonButton>())
             {
                 int originalWidth = btn.Width;
                 int originalHeight = btn.Height;
@@ -36,7 +41,7 @@ namespace cc105_pose_proj.UserControls
                 int originalLeft = btn.Left;
                 int originalTop = btn.Top;
 
-                Timer btnAnimate = new Timer();
+                Timer btnAnimate = new();
                 int expandAmount = 20;
                 btnAnimate.Interval = 15;
 
@@ -79,12 +84,14 @@ namespace cc105_pose_proj.UserControls
 
         private void Home_Resize(object sender, EventArgs e)
         {
-            panel1.Left = (this.ClientSize.Width - panel1.Width) / 2;
-            panel1.Top = (this.ClientSize.Height - panel1.Height) / 2;
-            panel2.Left = (this.ClientSize.Width - panel2.Width) / 2;
+            mainButtonPanel.Top = (this.ClientSize.Height - mainButtonPanel.Height) / 2;
+            mainButtonPanel.Left = (this.ClientSize.Width - mainButtonPanel.Width) / 2;
+            profilePanel.Top = profilePanel.Margin.Top;
+            profilePanel.Left = (this.ClientSize.Width - profilePanel.Width) / 2;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+
+        private void logoutBtn_Click(object sender, EventArgs e)
         {
             string message = "Are you sure you want to logout?";
             string caption = "Log Out";
@@ -103,19 +110,14 @@ namespace cc105_pose_proj.UserControls
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            _nav.NavigateTo(new Inventory(_nav));
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void newTransactionBtn_Click(object sender, EventArgs e)
         {
             _nav.NavigateTo(new MainTransaction(_nav));
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void viewMovementBtn_Click(object sender, EventArgs e)
         {
-            new Form2().ShowDialog();
+            _nav.NavigateTo(new Inventory(_nav));
         }
     }
 }

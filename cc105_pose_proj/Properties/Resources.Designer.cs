@@ -83,6 +83,16 @@ namespace cc105_pose_proj.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap home_bg {
+            get {
+                object obj = ResourceManager.GetObject("home_bg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap image {
             get {
                 object obj = ResourceManager.GetObject("image", resourceCulture);
@@ -126,6 +136,16 @@ namespace cc105_pose_proj.Properties {
         internal static System.Drawing.Bitmap Redbloom_Cheesecake {
             get {
                 object obj = ResourceManager.GetObject("Redbloom_Cheesecake", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap setting_icon {
+            get {
+                object obj = ResourceManager.GetObject("setting_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
