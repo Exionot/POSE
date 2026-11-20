@@ -62,8 +62,8 @@
             // 
             // profilePanel
             // 
-            profilePanel.Controls.Add(businessNameLabel);
             profilePanel.Controls.Add(settingBtn);
+            profilePanel.Controls.Add(businessNameLabel);
             profilePanel.Controls.Add(logoutBtn);
             profilePanel.Controls.Add(userProfilePictureBox);
             profilePanel.CornerRadius = 20;
@@ -89,7 +89,7 @@
             // settingBtn
             // 
             settingBtn.Location = new Point(652, 15);
-            settingBtn.Margin = new Padding(0, 10, 0, 10);
+            settingBtn.Margin = new Padding(10, 10, 0, 10);
             settingBtn.Name = "settingBtn";
             settingBtn.OverrideDefault.Back.Color1 = SystemColors.ControlDarkDark;
             settingBtn.Size = new Size(40, 40);
@@ -157,15 +157,15 @@
             manageDiscountBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             manageDiscountBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageDiscountBtn.Size = new Size(148, 110);
-            manageDiscountBtn.StateCommon.Back.Color1 = Color.Khaki;
+            manageDiscountBtn.StateCommon.Back.Color1 = Color.FromArgb(230, 191, 93);
             manageDiscountBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageDiscountBtn.StateCommon.Border.Rounding = 10F;
-            manageDiscountBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
+            manageDiscountBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
             manageDiscountBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             manageDiscountBtn.StateCommon.Content.ShortText.MultiLineH = Krypton.Toolkit.PaletteRelativeAlign.Center;
             manageDiscountBtn.TabIndex = 4;
             manageDiscountBtn.Values.DropDownArrowColor = Color.Empty;
-            manageDiscountBtn.Values.Text = "View Product\r\nMovement";
+            manageDiscountBtn.Values.Text = "Product\r\nMovement";
             // 
             // viewMovementBtn
             // 
@@ -177,10 +177,10 @@
             viewMovementBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             viewMovementBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewMovementBtn.Size = new Size(320, 110);
-            viewMovementBtn.StateCommon.Back.Color1 = Color.Khaki;
+            viewMovementBtn.StateCommon.Back.Color1 = Color.FromArgb(230, 191, 93);
             viewMovementBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewMovementBtn.StateCommon.Border.Rounding = 10F;
-            viewMovementBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
+            viewMovementBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
             viewMovementBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             viewMovementBtn.TabIndex = 3;
             viewMovementBtn.Values.DropDownArrowColor = Color.Empty;
@@ -197,14 +197,14 @@
             viewSalesBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             viewSalesBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewSalesBtn.Size = new Size(320, 110);
-            viewSalesBtn.StateCommon.Back.Color1 = Color.Khaki;
+            viewSalesBtn.StateCommon.Back.Color1 = Color.FromArgb(230, 191, 93);
             viewSalesBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             viewSalesBtn.StateCommon.Border.Rounding = 10F;
-            viewSalesBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
+            viewSalesBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
             viewSalesBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             viewSalesBtn.TabIndex = 2;
             viewSalesBtn.Values.DropDownArrowColor = Color.Empty;
-            viewSalesBtn.Values.Text = "Manage Discounts";
+            viewSalesBtn.Values.Text = "Discounts";
             // 
             // manageProductBtn
             // 
@@ -216,14 +216,14 @@
             manageProductBtn.OverrideFocus.Back.Color1 = Color.Khaki;
             manageProductBtn.OverrideFocus.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageProductBtn.Size = new Size(148, 110);
-            manageProductBtn.StateCommon.Back.Color1 = Color.Khaki;
+            manageProductBtn.StateCommon.Back.Color1 = Color.FromArgb(230, 191, 93);
             manageProductBtn.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
             manageProductBtn.StateCommon.Border.Rounding = 10F;
-            manageProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.ControlText;
+            manageProductBtn.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
             manageProductBtn.StateCommon.Content.ShortText.Font = new Font("Inter", 12F, FontStyle.Bold);
             manageProductBtn.TabIndex = 1;
             manageProductBtn.Values.DropDownArrowColor = Color.Empty;
-            manageProductBtn.Values.Text = "View Sales";
+            manageProductBtn.Values.Text = "Sales";
             // 
             // newTransactionBtn
             // 
