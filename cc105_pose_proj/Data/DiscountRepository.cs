@@ -72,7 +72,7 @@ namespace cc105_pose_proj.Data
                 ";
                 using var cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@name", entity.Name);
-                cmd.Parameters.AddWithValue("@type", entity.Type);
+                cmd.Parameters.AddWithValue("@type", entity.Type.ToString());
                 cmd.Parameters.AddWithValue("@value", entity.Value);
                 cmd.Parameters.AddWithValue("@buy_quantity", entity.BuyAmount);
                 cmd.Parameters.AddWithValue("@get_quantity", entity.GetAmount);

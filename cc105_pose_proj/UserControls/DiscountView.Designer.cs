@@ -32,6 +32,7 @@
             mainViewPanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
             discountTicketFlowPanel = new FlowLayoutPanel();
             headerPanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
+            addButton = new Krypton.Toolkit.KryptonButton();
             backBtn = new Krypton.Toolkit.KryptonButton();
             ((System.ComponentModel.ISupportInitialize)kryptonPanel1).BeginInit();
             kryptonPanel1.SuspendLayout();
@@ -76,6 +77,7 @@
             // 
             // headerPanel
             // 
+            headerPanel.Controls.Add(addButton);
             headerPanel.Controls.Add(backBtn);
             headerPanel.CornerRadius = 20;
             headerPanel.Location = new Point(30, 30);
@@ -85,6 +87,25 @@
             headerPanel.Size = new Size(751, 70);
             headerPanel.StateCommon.Color1 = SystemColors.Control;
             headerPanel.TabIndex = 0;
+            // 
+            // addButton
+            // 
+            addButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            addButton.Location = new Point(681, 15);
+            addButton.Margin = new Padding(0);
+            addButton.Name = "addButton";
+            addButton.OverrideDefault.Back.Color1 = Color.Goldenrod;
+            addButton.OverrideDefault.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            addButton.Size = new Size(40, 40);
+            addButton.StateCommon.Back.Color1 = Color.Goldenrod;
+            addButton.StateCommon.Back.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            addButton.StateCommon.Border.Rounding = 5F;
+            addButton.StateCommon.Content.ShortText.Color1 = SystemColors.Control;
+            addButton.StateCommon.Content.ShortText.Font = new Font("Inter Black", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            addButton.TabIndex = 3;
+            addButton.Values.DropDownArrowColor = Color.Empty;
+            addButton.Values.Text = "+";
+            addButton.Click += addButton_Click;
             // 
             // backBtn
             // 
@@ -132,5 +153,6 @@
         private Controls.RoundedKryptonPanel mainViewPanel;
         private Krypton.Toolkit.KryptonButton backBtn;
         private FlowLayoutPanel discountTicketFlowPanel;
+        private Krypton.Toolkit.KryptonButton addButton;
     }
 }

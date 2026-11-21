@@ -63,5 +63,13 @@ namespace cc105_pose_proj.UserControls
                 discountTicketFlowPanel.Controls.Add(ticket);
             }
         }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            var result = PopupForm.Open(this, new EditDiscount(), "New Discount");
+
+            if (result == DialogResult.OK)
+                RefreshDiscount();
+        }
     }
 }
