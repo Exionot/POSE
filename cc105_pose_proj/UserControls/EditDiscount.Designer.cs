@@ -42,6 +42,8 @@ namespace cc105_pose_proj.UserControls
             productFlowPanel = new FlowLayoutPanel();
             label4 = new Label();
             panel2 = new Panel();
+            getField = new Krypton.Toolkit.KryptonTextBox();
+            getLabel = new Label();
             valueField = new Krypton.Toolkit.KryptonTextBox();
             valueLabel = new Label();
             panel4 = new Panel();
@@ -50,8 +52,6 @@ namespace cc105_pose_proj.UserControls
             nameRowPanel = new Panel();
             nameField = new Krypton.Toolkit.KryptonTextBox();
             label1 = new Label();
-            getField = new Krypton.Toolkit.KryptonTextBox();
-            getLabel = new Label();
             headerPanel.SuspendLayout();
             infoPanel.SuspendLayout();
             panel1.SuspendLayout();
@@ -94,6 +94,7 @@ namespace cc105_pose_proj.UserControls
             deleteBtn.TabIndex = 3;
             deleteBtn.Values.DropDownArrowColor = Color.Empty;
             deleteBtn.Values.Text = "Delete";
+            deleteBtn.Click += deleteBtn_Click;
             // 
             // saveBtn
             // 
@@ -112,6 +113,7 @@ namespace cc105_pose_proj.UserControls
             saveBtn.TabIndex = 2;
             saveBtn.Values.DropDownArrowColor = Color.Empty;
             saveBtn.Values.Text = "Save";
+            saveBtn.Click += saveBtn_Click;
             // 
             // backBtn
             // 
@@ -234,6 +236,32 @@ namespace cc105_pose_proj.UserControls
             panel2.Size = new Size(440, 83);
             panel2.TabIndex = 11;
             // 
+            // getField
+            // 
+            getField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            getField.Location = new Point(230, 37);
+            getField.Margin = new Padding(10, 0, 0, 0);
+            getField.Name = "getField";
+            getField.Size = new Size(184, 31);
+            getField.StateCommon.Border.Color1 = SystemColors.ControlDark;
+            getField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
+            getField.StateCommon.Border.Rounding = 5F;
+            getField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            getField.StateCommon.Content.Padding = new Padding(5);
+            getField.TabIndex = 3;
+            // 
+            // getLabel
+            // 
+            getLabel.AutoSize = true;
+            getLabel.Font = new Font("Inter", 11.25F, FontStyle.Bold);
+            getLabel.Location = new Point(230, 10);
+            getLabel.Margin = new Padding(0);
+            getLabel.Name = "getLabel";
+            getLabel.Padding = new Padding(0, 0, 0, 5);
+            getLabel.Size = new Size(35, 27);
+            getLabel.TabIndex = 2;
+            getLabel.Text = "Get";
+            // 
             // valueField
             // 
             valueField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -286,6 +314,7 @@ namespace cc105_pose_proj.UserControls
             discountTypeComboBox.StateCommon.Item.Content.Padding = new Padding(5);
             discountTypeComboBox.StateCommon.Item.Content.ShortText.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             discountTypeComboBox.TabIndex = 5;
+            discountTypeComboBox.SelectedIndexChanged += discountTypeComboBox_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -336,32 +365,6 @@ namespace cc105_pose_proj.UserControls
             label1.Size = new Size(121, 27);
             label1.TabIndex = 0;
             label1.Text = "Discount Name";
-            // 
-            // getField
-            // 
-            getField.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            getField.Location = new Point(230, 37);
-            getField.Margin = new Padding(10, 0, 0, 0);
-            getField.Name = "getField";
-            getField.Size = new Size(184, 31);
-            getField.StateCommon.Border.Color1 = SystemColors.ControlDark;
-            getField.StateCommon.Border.ColorStyle = Krypton.Toolkit.PaletteColorStyle.Solid;
-            getField.StateCommon.Border.Rounding = 5F;
-            getField.StateCommon.Content.Font = new Font("Inter", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            getField.StateCommon.Content.Padding = new Padding(5);
-            getField.TabIndex = 3;
-            // 
-            // getLabel
-            // 
-            getLabel.AutoSize = true;
-            getLabel.Font = new Font("Inter", 11.25F, FontStyle.Bold);
-            getLabel.Location = new Point(230, 10);
-            getLabel.Margin = new Padding(0);
-            getLabel.Name = "getLabel";
-            getLabel.Padding = new Padding(0, 0, 0, 5);
-            getLabel.Size = new Size(35, 27);
-            getLabel.TabIndex = 2;
-            getLabel.Text = "Get";
             // 
             // EditDiscount
             // 

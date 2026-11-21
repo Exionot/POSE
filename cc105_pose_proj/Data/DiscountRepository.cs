@@ -51,9 +51,6 @@ namespace cc105_pose_proj.Data
 
             using var reader = cmd.ExecuteReader();
 
-            if (!reader.Read())
-                return null;
-
             return ReadDiscount(reader).FirstOrDefault();
         }
 
@@ -128,7 +125,7 @@ namespace cc105_pose_proj.Data
                 ";
                 using var cmd = new MySqlCommand(query, conn, transaction);
                 cmd.Parameters.AddWithValue("@name", entity.Name);
-                cmd.Parameters.AddWithValue("@type", entity.Type);
+                cmd.Parameters.AddWithValue("@type", entity.Type.ToString());
                 cmd.Parameters.AddWithValue("@value", entity.Value);
                 cmd.Parameters.AddWithValue("@buy_quantity", entity.BuyAmount);
                 cmd.Parameters.AddWithValue("@get_quantity", entity.GetAmount);
@@ -145,7 +142,7 @@ namespace cc105_pose_proj.Data
                 string deleteQuery = "delete from discount_items where discount_id = @id";
                 using var deleteCmd = new MySqlCommand(deleteQuery, conn, transaction);
                 deleteCmd.Parameters.AddWithValue("@id", entity.Id);
-                deleteCmd.ExecuteNonQuery();
+                int deletedRows = deleteCmd.ExecuteNonQuery();
 
                 if (!InsertItems(entity.Id, entity.EligibleItems, conn, transaction))
                 {
@@ -214,7 +211,6 @@ namespace cc105_pose_proj.Data
                 if (ProductMapper.IsPresent(reader))
                     discount.EligibleItems.Add(ProductMapper.CreateProduct(reader));
             }
-
             return discounts.Values.ToList();
         }
 

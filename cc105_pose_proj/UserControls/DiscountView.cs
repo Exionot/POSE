@@ -17,13 +17,7 @@ namespace cc105_pose_proj.UserControls
 
         private void DiscountView_Load(object sender, EventArgs e)
         {
-            discountTicketFlowPanel.Controls.Clear();
-            foreach (Discount d in _discountService.GetDiscounts())
-            {
-                var ticket = new DiscountTicket(d, 160);
-                ticket.editBtn.Click += (_, _) => EditDiscount(d);
-                discountTicketFlowPanel.Controls.Add(ticket);
-            }
+            RefreshDiscount();
         }
 
         private void DiscountView_Resize(object sender, EventArgs e)
@@ -53,7 +47,21 @@ namespace cc105_pose_proj.UserControls
 
         private void EditDiscount(Discount d)
         {
-            PopupForm.Open(this, new EditDiscount(d), d.Name);
+            var result = PopupForm.Open(this, new EditDiscount(d), d.Name);
+
+            if (result == DialogResult.OK)
+                RefreshDiscount();
+        }
+
+        private void RefreshDiscount()
+        {
+            discountTicketFlowPanel.Controls.Clear();
+            foreach (Discount d in _discountService.GetDiscounts())
+            {
+                var ticket = new DiscountTicket(d, 160);
+                ticket.editBtn.Click += (_, _) => EditDiscount(d);
+                discountTicketFlowPanel.Controls.Add(ticket);
+            }
         }
     }
 }
