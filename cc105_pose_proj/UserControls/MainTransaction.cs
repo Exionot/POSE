@@ -69,7 +69,7 @@ namespace cc105_pose_proj
                 Button btn = new();
                 try
                 {
-                    Buttons.CreateProductButton(btn, p);
+                    btn = Buttons.CreateProductButton(p);
                 }
                 catch (Exception ex) when (ex is IOException or ArgumentException)
                 {
@@ -246,7 +246,6 @@ namespace cc105_pose_proj
         private void UpdateSaleSummary()
         {
             SaleSummary summary = _pricingService.CalculateSale(_cart, _activeDiscounts);
-
             _items.Rows.Clear();
             foreach (var line in summary.LineItems)
             {

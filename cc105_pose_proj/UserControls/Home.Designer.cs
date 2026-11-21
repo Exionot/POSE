@@ -30,8 +30,8 @@
         {
             kryptonPanel1 = new Krypton.Toolkit.KryptonPanel();
             profilePanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
-            businessNameLabel = new Label();
             settingBtn = new Krypton.Toolkit.KryptonButton();
+            businessNameLabel = new Label();
             logoutBtn = new Krypton.Toolkit.KryptonButton();
             userProfilePictureBox = new PictureBox();
             mainButtonPanel = new cc105_pose_proj.Controls.RoundedKryptonPanel();
@@ -75,17 +75,6 @@
             profilePanel.StateCommon.Color1 = SystemColors.Control;
             profilePanel.TabIndex = 1;
             // 
-            // businessNameLabel
-            // 
-            businessNameLabel.AutoSize = true;
-            businessNameLabel.Font = new Font("Inter", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            businessNameLabel.Location = new Point(95, 20);
-            businessNameLabel.Margin = new Padding(5, 0, 0, 0);
-            businessNameLabel.Name = "businessNameLabel";
-            businessNameLabel.Size = new Size(82, 35);
-            businessNameLabel.TabIndex = 3;
-            businessNameLabel.Text = "label1";
-            // 
             // settingBtn
             // 
             settingBtn.Location = new Point(652, 15);
@@ -103,6 +92,17 @@
             settingBtn.TabIndex = 2;
             settingBtn.Values.DropDownArrowColor = Color.Empty;
             settingBtn.Values.Text = "";
+            // 
+            // businessNameLabel
+            // 
+            businessNameLabel.AutoSize = true;
+            businessNameLabel.Font = new Font("Inter", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            businessNameLabel.Location = new Point(95, 20);
+            businessNameLabel.Margin = new Padding(5, 0, 0, 0);
+            businessNameLabel.Name = "businessNameLabel";
+            businessNameLabel.Size = new Size(82, 35);
+            businessNameLabel.TabIndex = 3;
+            businessNameLabel.Text = "label1";
             // 
             // logoutBtn
             // 
@@ -205,6 +205,7 @@
             viewSalesBtn.TabIndex = 2;
             viewSalesBtn.Values.DropDownArrowColor = Color.Empty;
             viewSalesBtn.Values.Text = "Discounts";
+            viewSalesBtn.Click += viewSalesBtn_Click;
             // 
             // manageProductBtn
             // 

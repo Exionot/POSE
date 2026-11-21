@@ -22,5 +22,15 @@
         public List<Product> EligibleItems { get; set; } = [];
     }
 
-    
+    public record DiscountTypeItem(DiscountType Type, string DisplayText)
+    {
+        public override string ToString() => DisplayText;
+
+        public static readonly List<DiscountTypeItem> All =
+        [
+            new(DiscountType.PERCENTAGE, "Percentage"),
+            new(DiscountType.FIXED, "Fixed"),
+            new(DiscountType.BUY_X_GET_Y, "Buy X, Get Y")
+        ];
+    }
 }

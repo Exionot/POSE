@@ -61,7 +61,7 @@ namespace cc105_pose_proj.UserControls
             allProductPanel.Controls.Clear();
             foreach (Product p in productList)
             {
-                Button btn = Buttons.CreateProductButton(new Button(), p);
+                Button btn = Buttons.CreateProductButton(p);
                 btn.Click += (s, ev) => ViewProduct(p);
                 allProductPanel.Controls.Add(btn);
             }

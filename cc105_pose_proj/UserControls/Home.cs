@@ -22,7 +22,7 @@ namespace cc105_pose_proj.UserControls
 
 
             var user = Session.CurrentUser;
-            if (user != null) 
+            if (user != null)
             {
                 businessNameLabel.Text = user.Business != null ? user.Business.Name : user.Username;
                 userProfilePictureBox.Image = Image.FromFile(AppPaths.ResourceDir + user.Image);
@@ -118,6 +118,11 @@ namespace cc105_pose_proj.UserControls
         private void viewMovementBtn_Click(object sender, EventArgs e)
         {
             _nav.NavigateTo(new Inventory(_nav));
+        }
+
+        private void viewSalesBtn_Click(object sender, EventArgs e)
+        {
+            _nav.NavigateTo(new DiscountView(_nav));
         }
     }
 }

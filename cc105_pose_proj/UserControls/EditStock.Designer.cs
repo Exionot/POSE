@@ -55,6 +55,7 @@ namespace cc105_pose_proj.UserControls
             quantityField.StateCommon.Content.Padding = new Padding(5);
             quantityField.TabIndex = 5;
             quantityField.TextChanged += stockField_TextChanged;
+            quantityField.KeyPress += InputUtil.NumberOnly;
             // 
             // quantityLabel
             // 

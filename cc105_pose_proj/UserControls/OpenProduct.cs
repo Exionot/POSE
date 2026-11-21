@@ -4,8 +4,6 @@ using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 using Krypton.Toolkit;
 using System.Globalization;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace cc105_pose_proj.UserControls
 {
