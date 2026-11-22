@@ -105,8 +105,7 @@ namespace cc105_pose_proj.UserControls
 
             if (result == DialogResult.Yes)
             {
-                AuthService.Logout();
-                _nav.NavigateTo(new Login(_nav));
+                _nav.NavigateTo<Login>();
             }
         }
 

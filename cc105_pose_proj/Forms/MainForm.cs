@@ -3,13 +3,18 @@
 namespace cc105_pose_proj
 {
     using cc105_pose_proj.Navigation;
+    using cc105_pose_proj.UserControls;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Win32;
 
     public partial class MainForm : Form, INavigator
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly Form buyerForm = null!;
-        public MainForm()
+
+        public MainForm(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             InitializeComponent();
             buyerForm = new Form1();
             buyerForm.Show();
@@ -26,9 +31,22 @@ namespace cc105_pose_proj
             mainPanel.Controls.Add(view);
         }
 
+        public void NavigateTo<T>() where T : UserControl
+        {
+            T view = ActivatorUtilities.CreateInstance<T>(_serviceProvider, this);
+            NavigateTo(view);
+        }
+
+        public void NavigateTo<T>(Action<T> action) where T : UserControl
+        {
+            T view = _serviceProvider.GetRequiredService<T>();
+            action(view);
+            NavigateTo(view);
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
-            NavigateTo(new Login(this));
+            NavigateTo<Login>();
         }
 
         private void NewDisplayListener(object sender, EventArgs e)
