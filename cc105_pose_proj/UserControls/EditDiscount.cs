@@ -25,18 +25,6 @@ namespace cc105_pose_proj.UserControls
             CurrentDiscount = discount;
             IsEditMode = CurrentDiscount != null;
             InitializeComponent();
-            ResizeControl();
-        }
-        private void ResizeControl()
-        {
-            MainForm? main = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
-            if (main == null)
-                return;
-
-            this.Size = new Size(
-                (int)(main.ClientSize.Width / 3),
-                (int)(main.ClientSize.Height * 0.9)
-            );
         }
 
         private void EditDiscount_Load(object sender, EventArgs e)
