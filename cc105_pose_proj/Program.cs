@@ -86,6 +86,10 @@ namespace cc105_pose_proj
             services.AddScoped<IRepository<InventoryMovement>, InventoryMovementRepository>();
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBusinessService, BusinessService>();
+            services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IInventoryMovementService, IInventoryMovementService>();
+            services.AddScoped<IProductService, ProductService>();
 
 
             services.AddTransient<MainForm>();
