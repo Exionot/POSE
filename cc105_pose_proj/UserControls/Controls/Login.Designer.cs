@@ -1,6 +1,6 @@
 ﻿using cc105_pose_proj.Controls;
 
-namespace cc105_pose_proj
+namespace cc105_pose_proj.UserControls
 {
     partial class Login
     {
@@ -79,7 +79,6 @@ namespace cc105_pose_proj
             exitBtn.TabIndex = 16;
             exitBtn.Values.DropDownArrowColor = Color.Empty;
             exitBtn.Values.Text = "";
-            exitBtn.Click += exitBtn_Click;
             // 
             // loginButton
             // 
@@ -98,7 +97,6 @@ namespace cc105_pose_proj
             loginButton.TabIndex = 19;
             loginButton.Values.DropDownArrowColor = Color.Empty;
             loginButton.Values.Text = "Login";
-            loginButton.Click += loginButton_Click;
             // 
             // pictureBox1
             // 

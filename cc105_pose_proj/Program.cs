@@ -1,9 +1,18 @@
+using cc105_pose_proj.Data;
+using cc105_pose_proj.Forms;
+using cc105_pose_proj.Models;
+using cc105_pose_proj.Services;
+using cc105_pose_proj.Services.Interfaces;
+using cc105_pose_proj.UserControls;
+using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.MySqlClient;
 
 namespace cc105_pose_proj
 {
     internal static class Program
     {
+        public static IServiceProvider ServiceProvider { get; private set; } = null!;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -13,6 +22,7 @@ namespace cc105_pose_proj
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += (_, e) => HandleException(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
@@ -22,7 +32,12 @@ namespace cc105_pose_proj
                     HandleException(ex);
                 }
             };
-            Application.Run(new MainForm());
+
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            ServiceProvider = services.BuildServiceProvider();
+
+            Application.Run(new MainForm(ServiceProvider));
         }
 
         private static void HandleException(Exception ex)
@@ -58,6 +73,24 @@ namespace cc105_pose_proj
                 2013 => true, // lost connection during query
                 _ => false
             };
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<IDialogService, DialogService>();
+
+            services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<IRepository<Discount>, DiscountRepository>();
+            services.AddScoped<IRepository<Business>, BusinessRepository>();
+            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRepository<InventoryMovement>, InventoryMovementRepository>();
+
+            services.AddScoped<IAuthService, AuthService>();
+
+
+            services.AddTransient<MainForm>();
+            services.AddTransient<PopupForm>();
+            services.AddTransient<Login>();
         }
     }
 }

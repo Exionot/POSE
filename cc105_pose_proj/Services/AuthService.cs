@@ -1,14 +1,14 @@
 ﻿using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
+using cc105_pose_proj.Services.Interfaces;
 using cc105_pose_proj.Util;
 using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Pkix;
 
 namespace cc105_pose_proj.Services
 {
-    public static class AuthService
+    public class AuthService : IAuthService
     {
-        public static User? Authenticate(string username, string password)
+        public User? Authenticate(string username, string password)
         {
             using var conn = DbConnector.GetConnection();
             conn.Open();
@@ -63,9 +63,9 @@ namespace cc105_pose_proj.Services
             }; 
         }
 
-        public static bool Login(string username, string password)
+        public bool Login(string username, string password)
         {
-            User? user = AuthService.Authenticate(username, password);
+            User? user = Authenticate(username, password);
 
             if (user == null)
                 return false;
@@ -74,7 +74,7 @@ namespace cc105_pose_proj.Services
             return true;
         }
 
-        public static void Logout()
+        public void Logout()
         {
             Session.SignOut();
         }
