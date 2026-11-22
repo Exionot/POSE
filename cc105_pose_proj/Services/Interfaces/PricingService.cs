@@ -1,7 +1,7 @@
 ﻿using cc105_pose_proj.Models;
 using Microsoft.VisualBasic.ApplicationServices;
 
-namespace cc105_pose_proj.Services
+namespace cc105_pose_proj.Services.Interfaces
 {
     public class PricingService
     {
@@ -49,7 +49,7 @@ namespace cc105_pose_proj.Services
                     switch (applied.Type)
                     {
                         case DiscountType.PERCENTAGE:
-                            discountAmount = (price * (applied.Value / 100m)) * quantity;
+                            discountAmount = price * (applied.Value / 100m) * quantity;
                             break;
                         case DiscountType.FIXED:
                             discountAmount = Math.Min(applied.Value, price) * quantity;
@@ -58,14 +58,14 @@ namespace cc105_pose_proj.Services
                             int totalGet = applied.BuyAmount + applied.GetAmount;
                             if (totalGet > 0)
                             {
-                                int freeItems = (cartItem.Quantity / totalGet) * applied.GetAmount;
+                                int freeItems = cartItem.Quantity / totalGet * applied.GetAmount;
                                 discountAmount = freeItems * price;
                             }
                             break;
                     }
                 }
 
-                decimal lineTotal = (price * quantity) - discountAmount;
+                decimal lineTotal = price * quantity - discountAmount;
 
                 lineItems.Add(new LineItem(
                     Product: cartItem.Product,
@@ -126,7 +126,7 @@ namespace cc105_pose_proj.Services
             return discount.Type switch
             {
                 DiscountType.PERCENTAGE
-                    => Math.Max(price - (price * (discount.Value / 100m)), 0),
+                    => Math.Max(price - price * (discount.Value / 100m), 0),
                 DiscountType.FIXED
                     => Math.Max(price - discount.Value, 0),
                 _ => price

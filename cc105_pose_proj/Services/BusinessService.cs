@@ -1,9 +1,10 @@
 ﻿using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
+using cc105_pose_proj.Services.Interfaces;
 
 namespace cc105_pose_proj.Services
 {
-    public class BusinessService : BaseService
+    public class BusinessService : BaseService, IBusinessService
     {
         private readonly IRepository<Business> _businessRepo;
 

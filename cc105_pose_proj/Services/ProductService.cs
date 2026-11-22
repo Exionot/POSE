@@ -4,7 +4,7 @@ using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.Services
 {
-    public class ProductService : BaseService
+    public class ProductService : BaseService, IProductService
     {
         private readonly IRepository<Product> _productRepo;
 
@@ -34,7 +34,7 @@ namespace cc105_pose_proj.Services
             if (CurrentUser == null) return null;
 
             var product = _productRepo.GetById(id);
-            if (product == null) 
+            if (product == null)
                 return null;
 
             if (!IsAdmin && product.Business.Id != CurrentBusinessId)
@@ -73,7 +73,7 @@ namespace cc105_pose_proj.Services
 
                 return true;
             }
-            catch 
+            catch
             {
                 ImgUtil.DeleteImage(savedImageName);
                 throw;
@@ -92,7 +92,7 @@ namespace cc105_pose_proj.Services
 
             if (!string.IsNullOrEmpty(newImagePath))
                 product.Image = ImgUtil.ReplaceImage(existing.Image, newImagePath);
-            else 
+            else
                 product.Image = existing.Image;
 
             return _productRepo.Update(product);
@@ -107,8 +107,8 @@ namespace cc105_pose_proj.Services
 
             bool isDeleted = _productRepo.Delete(id);
             if (isDeleted)
-                ImgUtil.DeleteImage(product.Image); 
-            
+                ImgUtil.DeleteImage(product.Image);
+
             return isDeleted;
         }
     }

@@ -1,14 +1,14 @@
 ﻿using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
-using cc105_pose_proj.Util;
+using cc105_pose_proj.Services.Interfaces;
 
 namespace cc105_pose_proj.Services
 {
-    public class DiscountService : BaseService
+    public class DiscountService : BaseService, IDiscountService
     {
         private readonly IRepository<Discount> _discountRepo = new DiscountRepository();
 
-        public DiscountService(IRepository<Discount>? repo = null) 
+        public DiscountService(IRepository<Discount>? repo = null)
         {
             _discountRepo = repo ?? new DiscountRepository();
         }
@@ -32,7 +32,7 @@ namespace cc105_pose_proj.Services
             if (CurrentUser == null) return null;
 
             var discount = _discountRepo.GetById(id);
-            if (discount == null) 
+            if (discount == null)
                 return null;
 
             int? currentBusinessId = CurrentBusinessId;
@@ -60,7 +60,7 @@ namespace cc105_pose_proj.Services
         {
             if (CurrentUser == null) return false;
 
-            if (GetDiscountById(discount.Id) == null) 
+            if (GetDiscountById(discount.Id) == null)
                 return false;
 
             return _discountRepo.Update(discount);
@@ -70,7 +70,7 @@ namespace cc105_pose_proj.Services
         {
             if (CurrentUser == null) return false;
 
-            if (GetDiscountById(id) == null) 
+            if (GetDiscountById(id) == null)
                 return false;
 
             return _discountRepo.Delete(id);

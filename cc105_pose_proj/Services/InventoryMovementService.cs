@@ -1,9 +1,10 @@
 using cc105_pose_proj.Data;
 using cc105_pose_proj.Models;
+using cc105_pose_proj.Services.Interfaces;
 
 namespace cc105_pose_proj.Services
 {
-    public class InventoryMovementService : BaseService
+    public class InventoryMovementService : BaseService, IInventoryMovementService
     {
         private readonly ProductService _productService;
         private readonly InventoryMovementRepository _movementRepo;
