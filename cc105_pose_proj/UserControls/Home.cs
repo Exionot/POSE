@@ -1,8 +1,10 @@
-﻿using cc105_pose_proj.Navigation;
+﻿using cc105_pose_proj.Forms;
+using cc105_pose_proj.Navigation;
 using cc105_pose_proj.Properties;
 using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 using Krypton.Toolkit;
+using Microsoft.Extensions.DependencyInjection;
 using Timer = System.Windows.Forms.Timer;
 
 namespace cc105_pose_proj.UserControls
@@ -122,6 +124,13 @@ namespace cc105_pose_proj.UserControls
         private void viewSalesBtn_Click(object sender, EventArgs e)
         {
             _nav.NavigateTo(new DiscountView(_nav));
+        }
+
+        private void settingBtn_Click(object sender, EventArgs e)
+        {
+            var view = Program.ServiceProvider.GetRequiredService<ProfileSettingView>();
+
+            PopupForm.Open(this, view, "Settings", true);
         }
     }
 }

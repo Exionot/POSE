@@ -4,8 +4,9 @@ using cc105_pose_proj.Services;
 using cc105_pose_proj.UserControls;
 using cc105_pose_proj.Util;
 using System.Data;
-using static cc105_pose_proj.Services.PricingService;
+using static cc105_pose_proj.Services.Interfaces.PricingService;
 using Krypton.Toolkit;
+using cc105_pose_proj.Services.Interfaces;
 
 namespace cc105_pose_proj
 {

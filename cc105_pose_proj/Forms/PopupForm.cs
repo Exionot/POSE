@@ -8,11 +8,14 @@ namespace cc105_pose_proj.Forms
     }
     public partial class PopupForm : Form
     {
-        public PopupForm(UserControl control, string title, Form? owner = null)
+        public PopupForm(UserControl control, string title, bool showExit, Form? owner = null)
         {
             InitializeComponent();
             this.Text = title;
             this.StartPosition = FormStartPosition.CenterParent;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = showExit;
 
             if (owner != null)
             {
@@ -39,23 +42,11 @@ namespace cc105_pose_proj.Forms
             }
         }
 
-        private void ResizeControl()
-        {
-            MainForm? main = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
-            if (main == null)
-                return;
-
-            this.Size = new Size(
-                (int)(main.ClientSize.Width / 3),
-                (int)(main.ClientSize.Height * 0.9)
-            );
-        }
-
-        public static DialogResult Open(IWin32Window owner, UserControl content, string title)
+        public static DialogResult Open(IWin32Window owner, UserControl content, string title, bool showExit = false)
         {
             Form? ownerForm = owner as Form ?? Form.ActiveForm;
 
-            using var host = new PopupForm(content, title);
+            using var host = new PopupForm(content, title, showExit, ownerForm);
             return host.ShowDialog(owner);
         }
     }
