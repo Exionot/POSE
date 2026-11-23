@@ -1,6 +1,6 @@
 ﻿using cc105_pose_proj.Models;
 
-namespace cc105_pose_proj.Services
+namespace cc105_pose_proj.Services.Interfaces
 {
     public interface IProductService
     {

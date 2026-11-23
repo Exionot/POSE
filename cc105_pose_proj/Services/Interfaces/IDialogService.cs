@@ -2,7 +2,7 @@
 {
     public interface IDialogService
     {
-        void SHowInfo(string message, string title = "Information");
+        void ShowInfo(string message, string title = "Information");
         void ShowWarning(string message, string title = "Warning");
         void ShowError(string message, string title = "Error");
         bool Confirm(string message, string title = "Confirm");

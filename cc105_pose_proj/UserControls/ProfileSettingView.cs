@@ -20,21 +20,43 @@ namespace cc105_pose_proj.UserControls
 
         private readonly ProfileSettingViewPresenter _presenter;
         private string _selectedImage = string.Empty;
-        public ProfileSettingView(IAuthService authService, IDialogService dialogService)
+        public ProfileSettingView(
+            IBusinessService businessService,
+            IDialogService dialogService,
+            IUserService userService,
+            User? user = null)
         {
             InitializeComponent();
-            _presenter = new ProfileSettingViewPresenter(this, authService, dialogService);
+            _presenter = new ProfileSettingViewPresenter(
+                this, 
+                businessService,
+                dialogService,
+                userService,
+                user);
 
             saveBtn.Click += (_, _) => SaveRequest?.Invoke(this, EventArgs.Empty);
             selectImgBtn.Click += (_, _) => ImageSelectRequest?.Invoke(this, EventArgs.Empty);
             editPasswordBtn.Click += (_, _) => EditPasswordRequest?.Invoke(this, EventArgs.Empty);
             backBtn.Click += (_, _) => BackRequest?.Invoke(this, EventArgs.Empty);
-            showPasswordCheckBox.CheckStateChanged += (_, _) => ToggleShowPasswordRequest?.Invoke(this, EventArgs.Empty);
+            showPasswordCheckBox.Click += (_, _) => ToggleShowPasswordRequest?.Invoke(this, EventArgs.Empty);
         }
 
         public void Close(DialogResult dialogResult) => RequestClose?.Invoke(this, dialogResult);
-        public void SetProfileImage(Image image) => profilePictureBox.Image = image;
         public void SetBusinesses(List<Business> businesses) => businessComboBox.DataSource = businesses;
+
+        private void ProfileSettingView_Resize(object sender, EventArgs e)
+        {
+            int pictureBoxSize = (int)(this.ClientSize.Width / 2);
+            profilePictureBox.Size = new Size(pictureBoxSize, pictureBoxSize);
+            profilePictureBox.Left = (this.ClientSize.Width - profilePictureBox.Width) / 2;
+
+            selectImgBtn.Top = profilePictureBox.Bottom + selectImgBtn.Margin.Top;
+            selectImgBtn.Left = (this.ClientSize.Width - selectImgBtn.Width) / 2;
+
+            nameRowpanel.Top = selectImgBtn.Bottom + selectImgBtn.Margin.Bottom;
+            passwordRowPanel.Top = nameRowpanel.Bottom;
+            businessRowPanel.Top = passwordRowPanel.Bottom;
+        }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Username
@@ -53,18 +75,51 @@ namespace cc105_pose_proj.UserControls
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 
-        public string SelectedImage
+        public Image? SelectedImage
         {
-            get => _selectedImage;
-            set => _selectedImage = value;
+            get => profilePictureBox.Image;
+            set
+            {
+                var old = profilePictureBox.Image;
+                profilePictureBox.Image = value;
+                old?.Dispose();
+            }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-
         public Business? SelectedBusiness
         {
             get => businessComboBox.SelectedItem as Business;
             set => businessComboBox.SelectedItem = value;
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool BusinessSelectionEnabled
+        {
+            set => businessComboBox.Enabled = value;
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool PasswordControlEnabled
+        {
+            set 
+            {
+                passwordField.Enabled = value;
+                showPasswordCheckBox.Enabled = value;
+            }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool IsPasswordShown
+        {
+            get => showPasswordCheckBox.Checked;
+            set => showPasswordCheckBox.Checked = value;
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public char PasswordChar
+        {
+            set => passwordField.PasswordChar = value;
         }
     }
 }

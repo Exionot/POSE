@@ -1,7 +1,7 @@
 ﻿using cc105_pose_proj.Models;
 using Microsoft.VisualBasic.ApplicationServices;
 
-namespace cc105_pose_proj.Services.Interfaces
+namespace cc105_pose_proj.Services
 {
     public class PricingService
     {

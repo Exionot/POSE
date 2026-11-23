@@ -90,7 +90,7 @@ namespace cc105_pose_proj
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IInventoryMovementService, InventoryMovementService>();
             services.AddScoped<IProductService, ProductService>();
-
+            services.AddScoped<IUserService, UserService>();
 
             services.AddTransient<MainForm>();
             services.AddTransient<PopupForm>();

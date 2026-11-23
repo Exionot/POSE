@@ -15,7 +15,7 @@ namespace cc105_pose_proj.Services
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        public void SHowInfo(string message, string title = "Information")
+        public void ShowInfo(string message, string title = "Information")
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
