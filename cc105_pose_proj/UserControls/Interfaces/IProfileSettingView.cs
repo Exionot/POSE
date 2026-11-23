@@ -15,6 +15,7 @@ namespace cc105_pose_proj.UserControls.Interfaces
 
         void Close(DialogResult dialogResult);
         void SetBusinesses(List<Business> businesses);
+        void OpenEditPasswordDialog(User user);
 
         event EventHandler? ImageSelectRequest;
         event EventHandler? EditPasswordRequest;

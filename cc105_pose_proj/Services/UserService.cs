@@ -109,16 +109,12 @@ namespace cc105_pose_proj.Services
             if (!IsAdmin && CurrentUser.Id != userId) return false;
 
             if (string.IsNullOrWhiteSpace(newPassword)) return false;
+            if (string.IsNullOrWhiteSpace(currentPassword)) return false;
 
-            if (!IsAdmin)
-            {
-                if (string.IsNullOrWhiteSpace(currentPassword)) return false;
+            string? storedHash = _userRepo.GetPasswordHash(userId);
+            if (storedHash == null) return false;
 
-                string? storedHash = _userRepo.GetPasswordHash(userId);
-                if (storedHash == null) return false;
-
-                if (!PasswordUtils.checkPassword(currentPassword, storedHash)) return false;
-            }
+            if (!PasswordUtils.checkPassword(currentPassword, storedHash)) return false;
 
             string newHash = PasswordUtils.hashPassword(newPassword);
             return _userRepo.UpdatePassword(userId, newHash);

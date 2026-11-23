@@ -106,7 +106,8 @@ namespace cc105_pose_proj.Presenters
 
         private void EditPasswordRequest(object? sender, EventArgs e)
         {
-
+            if (_user == null) return;
+            _view.OpenEditPasswordDialog(_user);
         }
 
         private void SaveRequest(object? sender, EventArgs e)

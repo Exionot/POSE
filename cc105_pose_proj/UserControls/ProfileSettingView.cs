@@ -4,6 +4,7 @@ using cc105_pose_proj.Presenters;
 using cc105_pose_proj.Services.Interfaces;
 using cc105_pose_proj.UserControls.Interfaces;
 using cc105_pose_proj.Util;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 
 namespace cc105_pose_proj.UserControls
@@ -43,6 +44,13 @@ namespace cc105_pose_proj.UserControls
 
         public void Close(DialogResult dialogResult) => RequestClose?.Invoke(this, dialogResult);
         public void SetBusinesses(List<Business> businesses) => businessComboBox.DataSource = businesses;
+
+        public void OpenEditPasswordDialog(User user)
+        {
+            var dialog = ActivatorUtilities.CreateInstance<EditPasswordView>(
+                Program.ServiceProvider, user);
+            PopupForm.Open(this, dialog, "Edit Password", customSize: true);
+        }
 
         private void ProfileSettingView_Resize(object sender, EventArgs e)
         {
