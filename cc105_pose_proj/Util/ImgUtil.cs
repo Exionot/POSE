@@ -7,6 +7,23 @@ namespace cc105_pose_proj.Util
     {
         private static readonly string[] AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
 
+        public static string? SelectImage()
+        {
+            using var fileDialog = new OpenFileDialog();
+            fileDialog.Title = "Select an Image";
+            fileDialog.Filter = $"Image Files|*{string.Join(";*", AllowedExtensions)}";
+
+            fileDialog.Multiselect = false;
+            fileDialog.CheckFileExists = true;
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return fileDialog.FileName;
+            }
+
+            return null;
+        }
+
         public static void ValidateImg(string path)
         {
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))

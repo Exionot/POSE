@@ -1,8 +1,10 @@
-﻿using cc105_pose_proj.Navigation;
+﻿using cc105_pose_proj.Forms;
+using cc105_pose_proj.Navigation;
 using cc105_pose_proj.Properties;
 using cc105_pose_proj.Services;
 using cc105_pose_proj.Util;
 using Krypton.Toolkit;
+using Microsoft.Extensions.DependencyInjection;
 using Timer = System.Windows.Forms.Timer;
 
 namespace cc105_pose_proj.UserControls
@@ -20,13 +22,7 @@ namespace cc105_pose_proj.UserControls
         {
             settingBtn.FitIcon(Resources.setting_icon, 7);
 
-
-            var user = Session.CurrentUser;
-            if (user != null)
-            {
-                businessNameLabel.Text = user.Business != null ? user.Business.Name : user.Username;
-                userProfilePictureBox.Image = Image.FromFile(AppPaths.ResourceDir + user.Image);
-            }
+            RefreshUser();            
 
             businessNameLabel.Top = (profilePanel.Height - businessNameLabel.Height) / 2;
 
@@ -90,6 +86,15 @@ namespace cc105_pose_proj.UserControls
             profilePanel.Left = (this.ClientSize.Width - profilePanel.Width) / 2;
         }
 
+        private void RefreshUser()
+        {
+            var user = Session.CurrentUser;
+            if (user != null)
+            {
+                businessNameLabel.Text = user.Business != null ? user.Business.Name : user.Username;
+                userProfilePictureBox.Image = Image.FromFile(AppPaths.ResourceDir + user.Image);
+            }
+        }
 
         private void logoutBtn_Click(object sender, EventArgs e)
         {
@@ -122,6 +127,15 @@ namespace cc105_pose_proj.UserControls
         private void viewSalesBtn_Click(object sender, EventArgs e)
         {
             _nav.NavigateTo(new DiscountView(_nav));
+        }
+
+        private void settingBtn_Click(object sender, EventArgs e)
+        {
+            var view = ActivatorUtilities.CreateInstance<ProfileSettingView>(
+                Program.ServiceProvider, Session.CurrentUser!);
+
+            PopupForm.Open(this, view, "Settings", true);
+            RefreshUser();
         }
     }
 }

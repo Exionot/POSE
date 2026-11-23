@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Mysqlx.Crud;
 
 namespace cc105_pose_proj.Forms
 {
@@ -17,12 +8,27 @@ namespace cc105_pose_proj.Forms
     }
     public partial class PopupForm : Form
     {
-        public PopupForm(UserControl control, string title)
+        public PopupForm(UserControl control, string title, bool showExit, Form? owner = null, bool customSize = false)
         {
             InitializeComponent();
             this.Text = title;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.MinimizeBox = false;
+            this.MaximizeBox = false;
+            this.ControlBox = showExit;
 
-            this.ClientSize = control.Size;
+            if (owner != null && !customSize)
+            {
+                this.ClientSize = new Size(
+                    (int)(owner.ClientSize.Width / 3.0),
+                    (int)(owner.ClientSize.Height * 0.9)
+                );
+            }
+            else
+            {
+                this.ClientSize = control.Size;
+            }
+
             control.Dock = DockStyle.Fill;
             this.Controls.Add(control);
 
@@ -36,9 +42,11 @@ namespace cc105_pose_proj.Forms
             }
         }
 
-        public static DialogResult Open(IWin32Window owner, UserControl content, string title)
+        public static DialogResult Open(IWin32Window owner, UserControl content, string title, bool showExit = false, bool customSize = false)
         {
-            using var host = new PopupForm(content, title);
+            Form? ownerForm = owner as Form ?? Form.ActiveForm;
+
+            using var host = new PopupForm(content, title, showExit, ownerForm, customSize);
             return host.ShowDialog(owner);
         }
     }

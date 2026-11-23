@@ -92,6 +92,7 @@
             settingBtn.TabIndex = 2;
             settingBtn.Values.DropDownArrowColor = Color.Empty;
             settingBtn.Values.Text = "";
+            settingBtn.Click += settingBtn_Click;
             // 
             // businessNameLabel
             // 
