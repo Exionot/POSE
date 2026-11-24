@@ -1,23 +1,46 @@
 ﻿using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
-using cc105_pose_proj.Services;
+using cc105_pose_proj.Presenters;
+using cc105_pose_proj.Services.Interfaces;
+using cc105_pose_proj.UserControls.Interfaces;
 
 namespace cc105_pose_proj.UserControls
 {
-    public partial class DiscountView : UserControl
+    public partial class DiscountView : UserControl, IDiscountView
     {
-        private readonly DiscountService _discountService = new();
-        private readonly INavigator _nav;
-        public DiscountView(INavigator nav)
+        public event EventHandler? CreateDiscountRequest;
+        public event EventHandler<Discount>? EditDiscountRequest;
+        public event EventHandler? BackRequest;
+
+        private readonly DiscountViewPresenter _presenter;
+        public DiscountView(INavigator nav, IDiscountService discountService)
         {
-            _nav = nav;
             InitializeComponent();
+            _presenter = new DiscountViewPresenter(this, discountService, nav);
+
+            addButton.Click += (_, _) => CreateDiscountRequest?.Invoke(this, EventArgs.Empty);
+            backBtn.Click += (_, _) => BackRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        private void DiscountView_Load(object sender, EventArgs e)
+        public void SetDiscounts(List<Discount> discounts)
         {
-            RefreshDiscount();
+            discountTicketFlowPanel.Controls.Clear();
+            foreach (Discount d in discounts)
+            {
+                var ticket = new DiscountTicket(d, 160);
+                ticket.editBtn.Click += (_, _) => EditDiscountRequest?.Invoke(this, d);
+                discountTicketFlowPanel.Controls.Add(ticket);
+            }
+        }
+
+        public bool OpenDiscountDialog(Discount? discount = null)
+        {
+            string title = discount != null ? discount.Name : "New Discount";
+            var content = discount != null ? new EditDiscount(discount) : new EditDiscount();
+
+            DialogResult result = PopupForm.Open(this, content, title);
+            return result == DialogResult.OK;
         }
 
         private void DiscountView_Resize(object sender, EventArgs e)
@@ -38,38 +61,6 @@ namespace cc105_pose_proj.UserControls
             discountTicketFlowPanel.Height = mainViewPanel.Height - mainViewPanel.Padding.Top - mainViewPanel.Padding.Bottom;
             discountTicketFlowPanel.Top = mainViewPanel.Padding.Top;
             discountTicketFlowPanel.Left = mainViewPanel.Padding.Left;
-        }
-
-        private void backBtn_Click(object sender, EventArgs e)
-        {
-            _nav.NavigateTo(new Home(_nav));
-        }
-
-        private void EditDiscount(Discount d)
-        {
-            var result = PopupForm.Open(this, new EditDiscount(d), d.Name);
-
-            if (result == DialogResult.OK)
-                RefreshDiscount();
-        }
-
-        private void RefreshDiscount()
-        {
-            discountTicketFlowPanel.Controls.Clear();
-            foreach (Discount d in _discountService.GetDiscounts())
-            {
-                var ticket = new DiscountTicket(d, 160);
-                ticket.editBtn.Click += (_, _) => EditDiscount(d);
-                discountTicketFlowPanel.Controls.Add(ticket);
-            }
-        }
-
-        private void addButton_Click(object sender, EventArgs e)
-        {
-            var result = PopupForm.Open(this, new EditDiscount(), "New Discount");
-
-            if (result == DialogResult.OK)
-                RefreshDiscount();
         }
     }
 }

@@ -1,33 +1,53 @@
 ﻿using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
-using cc105_pose_proj.Services;
-using cc105_pose_proj.UserControls;
+using cc105_pose_proj.Presenters;
+using cc105_pose_proj.Services.Interfaces;
+using cc105_pose_proj.UserControls.Interfaces;
 using cc105_pose_proj.Util;
+using Krypton.Toolkit;
+using System.ComponentModel;
 using System.Data;
 using static cc105_pose_proj.Services.PricingService;
-using Krypton.Toolkit;
 
 namespace cc105_pose_proj
 {
-    public partial class MainTransaction : UserControl
+    public partial class MainTransaction : UserControl, IMainTransactionView
     {
-        private readonly INavigator _nav;
-        private readonly ProductService _productService = new();
-        private readonly PricingService _pricingService = new();
-        private readonly DiscountService _discountService = new(null);
+        public event EventHandler<Product>? ProductSelected;
+        public event EventHandler? RemoveOneRequest;
+        public event EventHandler? RemoveAllRequest;
+        public event EventHandler? ClearCartRequest;
+        public event EventHandler? BackRequest;
+        public event EventHandler? CheckoutRequest;
 
-        private List<Discount> _activeDiscounts = [];
-        private readonly List<CartItem> _cart = [];
-
+        private readonly MainTransactionViewPresenter _presenter;
         private readonly DataTable _items = new();
         private readonly Dictionary<string, Button> _productButtons = [];
-        private readonly Dictionary<string, Product> _products = [];
 
-        public MainTransaction(INavigator nav)
+        public MainTransaction(
+                INavigator nav,
+                IProductService productService,
+                IDiscountService discountService,
+                IDialogService dialogService)
         {
-            _nav = nav;
             InitializeComponent();
+            SetupGridColumns();
 
+            _presenter = new MainTransactionViewPresenter(
+                this,
+                nav,
+                productService,
+                discountService,
+                dialogService);
+
+            removeOneBtn.Click += (_, _) => RemoveOneRequest?.Invoke(this, EventArgs.Empty);
+            removeAllBtn.Click += (_, _) => RemoveAllRequest?.Invoke(this, EventArgs.Empty);
+            clearTableBtn.Click += (_, _) => ClearCartRequest?.Invoke(this, EventArgs.Empty);
+            backBtn.Click += (_, _) => BackRequest?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SetupGridColumns()
+        {
             _items.Columns.Add("Name", typeof(string));
             _items.Columns.Add("Price", typeof(decimal));
             _items.Columns.Add("Qty", typeof(int));
@@ -44,47 +64,74 @@ namespace cc105_pose_proj
             transactionGrid.Columns["Qty"]!.FillWeight = 8f;
             transactionGrid.Columns["Discount"]!.FillWeight = 18f;
             transactionGrid.Columns["Total"]!.FillWeight = 16f;
-
-            UpdateSaleSummary();
         }
 
-        private void MainTransaction_Load(object sender, EventArgs e)
+        public void SetProductButtons(List<Product> products)
         {
-            _activeDiscounts = _discountService.GetDiscounts()
-                .Where(d => d.Active)
-                .ToList();
-
-            List<Product> productList = _productService.GetProducts();
-
             productButtonPanel.Controls.Clear();
             _productButtons.Clear();
-            _products.Clear();
 
-            foreach (Product p in productList)
+            foreach (var p in products)
             {
-                string name = p.Name;
-                if (_products.ContainsKey(name))
+                if (_productButtons.ContainsKey(p.Name))
                     continue;
 
-                Button btn = new();
+                Button btn;
                 try
                 {
                     btn = Buttons.CreateProductButton(p);
                 }
                 catch (Exception ex) when (ex is IOException or ArgumentException)
                 {
-                    btn.Text = name;
+                    btn = new Button { Text = p.Name };
                 }
 
                 btn.Enabled = p.Quantity > 0;
-                btn.Click += (_, _) => AddToCart(p);
-                productButtonPanel.Controls.Add(btn);
+                btn.Click += (_, _) => ProductSelected?.Invoke(this, p);
 
-                _productButtons.Add(name, btn);
-                _products.Add(name, p);
+                productButtonPanel.Controls.Add(btn);
+                _productButtons.Add(p.Name, btn);
+            }
+        }
+
+        public void SetCartItems(List<LineItem> lineItems)
+        {
+            _items.Rows.Clear();
+            foreach (var line in lineItems)
+            {
+                DataRow row = _items.NewRow();
+                row["Name"] = line.Product.Name;
+                row["Price"] = line.Price;
+                row["Qty"] = line.Quantity;
+                row["Discount"] = line.AppliedDiscount != null
+                    ? $"{line.AppliedDiscount.Name}"
+                    : "N/A";
+                row["Total"] = line.LineTotal;
+                _items.Rows.Add(row);
             }
 
-            UpdateSaleSummary();
+            foreach (Panel pn in totalListPanel.Controls.OfType<Panel>())
+            {
+                FitTotalLabel(pn.Controls.OfType<Label>());
+            }
+        }
+
+        public void SetProductAvailability(string productName, bool isAvailable)
+        {
+            if (_productButtons.TryGetValue(productName, out var btn))
+            {
+                btn.Enabled = isAvailable;
+            }
+        }
+
+        public void FocusFirstRow()
+        {
+            transactionGrid.ClearSelection();
+            if (_items.Rows.Count > 0)
+            {
+                transactionGrid.CurrentCell = transactionGrid.Rows[0].Cells[0];
+                transactionGrid.Rows[0].Selected = true;
+            }
         }
 
         private void MainTransaction_Resize(object sender, EventArgs e)
@@ -124,11 +171,9 @@ namespace cc105_pose_proj
             foreach (Panel p in totalListPanel.Controls.OfType<Panel>())
             {
                 var labels = p.Controls.OfType<Label>();
-
                 p.Height = labels.FirstOrDefault()!.Height + 10;
                 p.Width = totalListPanel.Width - totalPanelPadding;
                 p.Left = totalPanelPadding;
-
                 FitTotalLabel(labels);
             }
 
@@ -139,12 +184,12 @@ namespace cc105_pose_proj
 
             actionPanel.Width = (int)(totalPanel.Width * 0.6);
             int buttonMargin = 10;
-            int totalButtonMargin = buttonMargin * 4; 
+            int totalButtonMargin = buttonMargin * 4;
             foreach (KryptonButton b in flowLayoutPanel1.Controls.OfType<KryptonButton>())
             {
                 b.AutoSize = false;
                 b.Height = (actionPanel.Height - totalPanelPadding - totalButtonMargin) / 2;
-                b.Width = (actionPanel.Width - totalPanelPadding - (totalButtonMargin*2)) / 2;
+                b.Width = (actionPanel.Width - totalPanelPadding - (totalButtonMargin * 2)) / 2;
             }
         }
 
@@ -160,159 +205,34 @@ namespace cc105_pose_proj
             }
         }
 
-        private string? GetSelectedProductName()
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+
+        public string Subtotal
         {
-            var view = transactionGrid.CurrentRow?.DataBoundItem as DataRowView;
-            return view?.Row.Field<string>("Name");
+            set => subTotalLabel.Text = value;
         }
 
-        private void AddToCart(Product p)
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+
+        public string TotalSaved
         {
-            var existing = _cart.FirstOrDefault(c => c.Product.Id == p.Id);
-            int currentQty = existing?.Quantity ?? 0;
-
-            if (currentQty >= p.Quantity)
-            {
-                MessageBox.Show(
-                    $"Cannot add more than {p.Quantity} units of '{p.Name}'. Stock limit reached.",
-                    "Insufficient Stock",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (existing == null)
-            {
-                _cart.Insert(0, new CartItem(p, 1));
-            }
-            else
-            {
-                _cart.Remove(existing);
-                _cart.Insert(0, existing with { Quantity = currentQty + 1 });
-            }
-
-            UpdateSaleSummary();
-            FocusFirstRow();
+            set => discountLabel.Text = value;
         }
 
-        private void RemoveOne()
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+
+        public string GrandTotal
         {
-            string? name = GetSelectedProductName();
-            if (name == null) return;
-
-            var existing = _cart.FirstOrDefault(c => c.Product.Name == name);
-            if (existing == null) return;
-
-            int index = _cart.IndexOf(existing);
-            if (existing.Quantity > 1)
-            {
-                _cart[index] = existing with { Quantity = existing.Quantity - 1 };
-            }
-            else
-            {
-                _cart.RemoveAt(index);
-            }
-
-            UpdateSaleSummary();
+            set => totalLabel.Text = value;
         }
 
-        private void RemoveAll()
+        public string? SelectedProductName
         {
-            string? name = GetSelectedProductName();
-            if (name == null) return;
-
-            _cart.RemoveAll(c => c.Product.Name == name);
-            UpdateSaleSummary();
-        }
-
-        private void ClearCart()
-        {
-            if (_cart.Count == 0) return;
-
-            DialogResult result = MessageBox.Show(
-                "Are you sure you want to clear all items?",
-                "Confirm Clear",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question,
-                MessageBoxDefaultButton.Button2);
-
-            if (result != DialogResult.Yes)
-                return;
-
-            _cart.Clear();
-            UpdateSaleSummary();
-        }
-
-        private void UpdateSaleSummary()
-        {
-            SaleSummary summary = _pricingService.CalculateSale(_cart, _activeDiscounts);
-            _items.Rows.Clear();
-            foreach (var line in summary.LineItems)
+            get
             {
-                DataRow row = _items.NewRow();
-                row["Name"] = line.Product.Name;
-                row["Price"] = line.Price;
-                row["Qty"] = line.Quantity;
-                row["Discount"] = line.AppliedDiscount != null
-                    ? $"{line.AppliedDiscount.Name}"
-                    : "N/A";
-                row["Total"] = line.LineTotal;
-                _items.Rows.Add(row);
+                var view = transactionGrid.CurrentRow?.DataBoundItem as DataRowView;
+                return view?.Row.Field<string>("Name");
             }
-
-            subTotalLabel.Text = summary.Subtotal.ToString("C2");
-            discountLabel.Text = summary.TotalSaved > 0
-                ? $"-{summary.TotalSaved:C2}"
-                : "₱0.00";
-            totalLabel.Text = summary.GrandTotal.ToString("C2");
-
-            foreach (var (name, product) in _products)
-            {
-                int inCart = _cart.FirstOrDefault(c => c.Product.Id == product.Id)?.Quantity ?? 0;
-                int remaining = product.Quantity - inCart;
-
-                if (_productButtons.TryGetValue(name, out var btn))
-                {
-                    btn.Enabled = remaining > 0;
-                }
-            }
-
-            foreach (Panel pn in totalListPanel.Controls.OfType<Panel>())
-            {
-                FitTotalLabel(pn.Controls.OfType<Label>());
-            }
-        }
-
-        private void FocusFirstRow()
-        {
-            transactionGrid.ClearSelection();
-            if (_items.Rows.Count > 0)
-            {
-                transactionGrid.CurrentCell = transactionGrid.Rows[0].Cells[0];
-                transactionGrid.Rows[0].Selected = true;
-            }
-        }
-
-        private void kryptonButton1_Click(object sender, EventArgs e) => RemoveOne();
-        private void removeAllBtn_Click(object sender, EventArgs e) => RemoveAll();
-        private void clearTableBtn_Click(object sender, EventArgs e) => ClearCart();
-
-        private void backBtn_Click(object sender, EventArgs e)
-        {
-            if (_cart.Count > 0)
-            {
-                DialogResult result = MessageBox.Show(
-                    "Cancel this transaction and go back to home?",
-                    "Confirm Exit",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question,
-                    MessageBoxDefaultButton.Button2);
-
-                if (result != DialogResult.Yes)
-                    return;
-            }
-
-            _nav.NavigateTo(new Home(_nav));
         }
     }
 }

@@ -78,11 +78,13 @@ namespace cc105_pose_proj
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<PricingService>();
 
             services.AddScoped<IRepository<Product>, ProductRepository>();
             services.AddScoped<IRepository<Discount>, DiscountRepository>();
             services.AddScoped<IRepository<Business>, BusinessRepository>();
             services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRepository<InventoryMovement>, InventoryMovementRepository>();
 
             services.AddScoped<IAuthService, AuthService>();
@@ -95,7 +97,12 @@ namespace cc105_pose_proj
             services.AddTransient<MainForm>();
             services.AddTransient<PopupForm>();
             services.AddTransient<Login>();
+            services.AddTransient<Home>();               
+            services.AddTransient<MainTransaction>();     
+            services.AddTransient<Inventory>();           
+            services.AddTransient<DiscountView>();        
             services.AddTransient<ProfileSettingView>();
+            services.AddTransient<EditPasswordView>();         
         }
     }
 }

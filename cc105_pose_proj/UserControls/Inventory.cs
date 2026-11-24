@@ -1,26 +1,82 @@
-﻿using cc105_pose_proj.Data;
-using cc105_pose_proj.Forms;
+﻿using cc105_pose_proj.Forms;
 using cc105_pose_proj.Models;
 using cc105_pose_proj.Navigation;
-using cc105_pose_proj.Services;
+using cc105_pose_proj.Presenters;
+using cc105_pose_proj.Services.Interfaces;
+using cc105_pose_proj.UserControls.Interfaces;
 using cc105_pose_proj.Util;
 
 namespace cc105_pose_proj.UserControls
 {
-    public partial class Inventory : UserControl
+    public partial class Inventory : UserControl, IInventoryView
     {
-        private readonly INavigator _nav;
-        private readonly ProductService _productService = new();
-        private Product selectedProduct = null!;
-        public Inventory(INavigator nav)
+        public event EventHandler<Product>? ProductSelected;
+        public event EventHandler? CreateProductRequest;
+        public event EventHandler? EditProductRequest;
+        public event EventHandler? BackRequest;
+
+        private readonly InventoryViewPresenter _presenter;
+        public Inventory(INavigator nav, IProductService productService)
         {
-            _nav = nav;
             InitializeComponent();
+            _presenter = new InventoryViewPresenter(this, productService, nav);
+
+            newProductBtn.Click += (_, _) => CreateProductRequest?.Invoke(this, EventArgs.Empty);
+            editProductBtn.Click += (_, _) => EditProductRequest?.Invoke(this, EventArgs.Empty);
+            backBtn.Click += (_, _) => BackRequest?.Invoke(this, EventArgs.Empty);
         }
 
-        private void backBtn_Click(object sender, EventArgs e)
+        public void SetProducts(List<Product> products)
         {
-            _nav.NavigateTo(new Home(_nav));
+            allProductPanel.Controls.Clear();
+            foreach (Product p in products)
+            {
+                Button btn = Buttons.CreateProductButton(p);
+                btn.Click += (_, _) => ProductSelected?.Invoke(this, p);
+                allProductPanel.Controls.Add(btn);
+            }
+        }
+
+        public void DisplayProductDetails(Product? p)
+        {
+            foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
+            {
+                panel.Visible = p is not null;
+            }
+
+            if (p == null)
+            {
+                productPictureBox.Image?.Dispose();
+                productPictureBox.Image = null;
+                return;
+            }
+
+            string imgPath = Path.Combine(AppPaths.ResourceDir, p.Image);
+            if (File.Exists(imgPath))
+            {
+                using var temp = Image.FromFile(imgPath);
+                var oldImg = productPictureBox.Image;
+                productPictureBox.Image = new Bitmap(temp);
+                oldImg?.Dispose();
+            }
+
+            nameLabel.Text = p.Name;
+            priceLabel.Text = p.Price.ToString("C2");
+            productStockLabel.Text = p.Quantity.ToString();
+            productBusinessLabel.Text = p.Business.Name;
+            productCreatedLabel.Text = p.Created.ToString();
+            productUpdatedLabel.Text = p.Updated.ToString();
+
+            fixProductPanel();
+        }
+
+        public bool OpenProductDialog(Product? product = null)
+        {
+            string title = product != null ? product.Name : "New Product";
+            var dialog = product != null ? new OpenProduct(product) : new OpenProduct();
+
+            DialogResult result = PopupForm.Open(this, dialog, title);
+            return result == DialogResult.OK;
         }
 
         private void Inventory_Resize(object sender, EventArgs e)
@@ -42,64 +98,6 @@ namespace cc105_pose_proj.UserControls
 
             rightPanel.Width = (int)(this.Width * 0.55);
             allProductPanel.Height = rightPanel.Height - productLabel.Height - productLabel.Margin.Top;
-        }
-
-        private void Inventory_Load(object sender, EventArgs e)
-        {
-            foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
-            {
-                panel.Visible = false;
-            }
-
-            RefreshProducts();
-        }
-
-        private void RefreshProducts()
-        {
-            List<Product> productList = _productService.GetProducts();
-
-            allProductPanel.Controls.Clear();
-            foreach (Product p in productList)
-            {
-                Button btn = Buttons.CreateProductButton(p);
-                btn.Click += (s, ev) => ViewProduct(p);
-                allProductPanel.Controls.Add(btn);
-            }
-        }
-
-        private void ViewProduct(Product? p)
-        {
-            selectedProduct = p;
-            foreach (Panel panel in leftPanel.Controls.OfType<Panel>())
-            {
-                panel.Visible = p is not null;
-            }
-
-            if (p == null)
-                return;
-
-            Image img = Image.FromFile(AppPaths.ResourceDir + p.Image);
-            productPictureBox.Image = (Image)img.Clone();
-            img?.Dispose();
-
-            nameLabel.Text = p.Name;
-            priceLabel.Text = p.Price.ToString("C2");
-            productStockLabel.Text = p.Quantity.ToString();
-            productBusinessLabel.Text = p.Business.Name;
-            productCreatedLabel.Text = p.Created.ToString();
-            productUpdatedLabel.Text = p.Updated.ToString();
-
-            fixProductPanel();
-        }
-
-        private void EditProduct(Product p)
-        {
-            PopupForm.Open(this, new OpenProduct(p), p.Name);
-
-            RefreshProducts();
-
-            var updatedProduct = _productService.GetProductById(p.Id);
-            ViewProduct(updatedProduct);
         }
 
         private void fixProductPanel()
@@ -137,16 +135,5 @@ namespace cc105_pose_proj.UserControls
             panel.Left = (parent.Width - panel.Width) / 2;
         }
 
-        private void newProductBtn_Click(object sender, EventArgs e)
-        {
-            PopupForm.Open(this, new OpenProduct(), "New Product");
-
-            RefreshProducts();
-        }
-
-        private void editProductBtn_Click_1(object sender, EventArgs e)
-        {
-            EditProduct(selectedProduct);
-        }
     }
 }

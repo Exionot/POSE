@@ -92,7 +92,6 @@
             settingBtn.TabIndex = 2;
             settingBtn.Values.DropDownArrowColor = Color.Empty;
             settingBtn.Values.Text = "";
-            settingBtn.Click += settingBtn_Click;
             // 
             // businessNameLabel
             // 
@@ -120,7 +119,6 @@
             logoutBtn.TabIndex = 1;
             logoutBtn.Values.DropDownArrowColor = Color.Empty;
             logoutBtn.Values.Text = "Logout";
-            logoutBtn.Click += logoutBtn_Click;
             // 
             // userProfilePictureBox
             // 
@@ -186,7 +184,6 @@
             viewMovementBtn.TabIndex = 3;
             viewMovementBtn.Values.DropDownArrowColor = Color.Empty;
             viewMovementBtn.Values.Text = "Inventory";
-            viewMovementBtn.Click += viewMovementBtn_Click;
             // 
             // viewSalesBtn
             // 
@@ -206,7 +203,6 @@
             viewSalesBtn.TabIndex = 2;
             viewSalesBtn.Values.DropDownArrowColor = Color.Empty;
             viewSalesBtn.Values.Text = "Discounts";
-            viewSalesBtn.Click += viewSalesBtn_Click;
             // 
             // manageProductBtn
             // 
@@ -246,7 +242,6 @@
             newTransactionBtn.TabIndex = 0;
             newTransactionBtn.Values.DropDownArrowColor = Color.Empty;
             newTransactionBtn.Values.Text = "New\r\nTransaction\r\n";
-            newTransactionBtn.Click += newTransactionBtn_Click;
             // 
             // Home
             // 
