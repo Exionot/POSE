@@ -304,7 +304,6 @@
             removeOneBtn.TabIndex = 0;
             removeOneBtn.Values.DropDownArrowColor = Color.Empty;
             removeOneBtn.Values.Text = "Remove One";
-            removeOneBtn.Click += kryptonButton1_Click;
             // 
             // removeAllBtn
             // 
@@ -323,7 +322,6 @@
             removeAllBtn.TabIndex = 1;
             removeAllBtn.Values.DropDownArrowColor = Color.Empty;
             removeAllBtn.Values.Text = "Remove All";
-            removeAllBtn.Click += removeAllBtn_Click;
             // 
             // clearTableBtn
             // 
@@ -342,7 +340,6 @@
             clearTableBtn.TabIndex = 2;
             clearTableBtn.Values.DropDownArrowColor = Color.Empty;
             clearTableBtn.Values.Text = "Clear Table";
-            clearTableBtn.Click += clearTableBtn_Click;
             // 
             // headerPanel
             // 
@@ -370,7 +367,6 @@
             backBtn.TabIndex = 0;
             backBtn.Values.DropDownArrowColor = Color.Empty;
             backBtn.Values.Text = "↩";
-            backBtn.Click += backBtn_Click;
             // 
             // leftPanel
             // 
@@ -400,7 +396,6 @@
             Controls.Add(headerPanel);
             Name = "MainTransaction";
             Size = new Size(1101, 613);
-            Load += MainTransaction_Load;
             Resize += MainTransaction_Resize;
             ((System.ComponentModel.ISupportInitialize)productsPanel).EndInit();
             productsPanel.ResumeLayout(false);
