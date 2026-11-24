@@ -93,7 +93,6 @@
             backBtn.TabIndex = 1;
             backBtn.Values.DropDownArrowColor = Color.Empty;
             backBtn.Values.Text = "↩";
-            backBtn.Click += backBtn_Click;
             // 
             // leftPanel
             // 
@@ -312,7 +311,6 @@
             editProductBtn.TabIndex = 4;
             editProductBtn.Values.DropDownArrowColor = Color.Empty;
             editProductBtn.Values.Text = "Edit";
-            editProductBtn.Click += editProductBtn_Click_1;
             // 
             // rightPanel
             // 
@@ -351,7 +349,6 @@
             newProductBtn.TabIndex = 2;
             newProductBtn.Values.DropDownArrowColor = Color.Empty;
             newProductBtn.Values.Text = "+";
-            newProductBtn.Click += newProductBtn_Click;
             // 
             // productLabel
             // 
@@ -373,7 +370,6 @@
             Controls.Add(headerPanel);
             Name = "Inventory";
             Size = new Size(884, 631);
-            Load += Inventory_Load;
             Resize += Inventory_Resize;
             headerPanel.ResumeLayout(false);
             leftPanel.ResumeLayout(false);
