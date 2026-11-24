@@ -105,7 +105,6 @@
             addButton.TabIndex = 3;
             addButton.Values.DropDownArrowColor = Color.Empty;
             addButton.Values.Text = "+";
-            addButton.Click += addButton_Click;
             // 
             // backBtn
             // 
@@ -123,7 +122,6 @@
             backBtn.TabIndex = 2;
             backBtn.Values.DropDownArrowColor = Color.Empty;
             backBtn.Values.Text = "↩";
-            backBtn.Click += backBtn_Click;
             // 
             // DiscountView
             // 
@@ -135,7 +133,6 @@
             DoubleBuffered = true;
             Name = "DiscountView";
             Size = new Size(811, 517);
-            Load += DiscountView_Load;
             Resize += DiscountView_Resize;
             ((System.ComponentModel.ISupportInitialize)kryptonPanel1).EndInit();
             kryptonPanel1.ResumeLayout(false);
