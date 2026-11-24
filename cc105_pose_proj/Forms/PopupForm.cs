@@ -1,6 +1,4 @@
-﻿using Mysqlx.Crud;
-
-namespace cc105_pose_proj.Forms
+﻿namespace cc105_pose_proj.Forms
 {
     public interface IDialogControl
     {
