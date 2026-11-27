@@ -33,6 +33,7 @@ namespace cc105_pose_proj
         {
             InitializeComponent();
             SetupGridColumns();
+            LayoutUtil.SetAutoFitEvents(totalListPanel);
 
             _presenter = new MainTransactionViewPresenter(
                 this,
@@ -114,7 +115,7 @@ namespace cc105_pose_proj
 
             foreach (Panel pn in totalListPanel.Controls.OfType<Panel>())
             {
-                FitTotalLabel(pn.Controls.OfType<Label>());
+                LayoutUtil.FitTotalLabel(pn.Controls.OfType<Label>());
             }
         }
 
@@ -176,7 +177,7 @@ namespace cc105_pose_proj
                 p.Height = labels.FirstOrDefault()!.Height + 10;
                 p.Width = totalListPanel.Width - totalPanelPadding;
                 p.Left = totalPanelPadding;
-                FitTotalLabel(labels);
+                LayoutUtil.FitTotalLabel(labels);
             }
 
             int rowGap = 5;
@@ -195,17 +196,7 @@ namespace cc105_pose_proj
             }
         }
 
-        private void FitTotalLabel(IEnumerable<Label> labels)
-        {
-            foreach (Label l in labels)
-            {
-                if (l.Anchor.HasFlag(AnchorStyles.Left))
-                    l.Left = 0;
-                else if (l.Anchor.HasFlag(AnchorStyles.Right))
-                    l.Left = l.Parent!.Width - l.Width;
-                l.Top = (l.Parent!.Height - l.Height) / 2;
-            }
-        }
+        
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 

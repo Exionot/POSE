@@ -1,6 +1,7 @@
 ﻿using cc105_pose_proj.Forms.Interfaces;
 using cc105_pose_proj.Presenters;
 using cc105_pose_proj.Services.Interfaces;
+using cc105_pose_proj.Util;
 using System.ComponentModel;
 using System.Data;
 using static cc105_pose_proj.Services.PricingService;
@@ -15,6 +16,7 @@ namespace cc105_pose_proj.Forms
         {
             InitializeComponent();
             SetupGridColumns();
+            LayoutUtil.SetAutoFitEvents(totalsPanel);
 
             _presenter = new BuyerFormPresenter(this, transactionStateService);
         }
@@ -39,6 +41,16 @@ namespace cc105_pose_proj.Forms
             transactionGrid.Columns["Total"]!.FillWeight = 16f;
         }
 
+        private void UpdateLayout()
+        {
+            if (transactionPanel.Visible)
+            {
+                adPanel.Left = adPanel.Margin.Left;
+                transactionPanel.Left = adPanel.Right + adPanel.Margin.Right + transactionPanel.Margin.Left;
+            }
+            else adPanel.Left = (this.ClientSize.Width - adPanel.Width) / 2;
+        }
+
         public void ShowIdle()
         {
             if (InvokeRequired)
@@ -49,6 +61,7 @@ namespace cc105_pose_proj.Forms
 
             _itemsTable.Rows.Clear();
             transactionPanel.Visible = false;
+            UpdateLayout();
         }
 
         public void ShowTransactionItems(List<LineItem> lineItems)
@@ -60,6 +73,7 @@ namespace cc105_pose_proj.Forms
             }
 
             transactionPanel.Visible = true;
+            UpdateLayout();
 
             _itemsTable.Rows.Clear();
             foreach (var line in lineItems)
@@ -80,7 +94,6 @@ namespace cc105_pose_proj.Forms
 
             adPanel.Width = (this.Width / 2) - adPanelPadding;
             adPanel.Top = adPanel.Margin.Top;
-            adPanel.Left = adPanel.Margin.Left;
             adPanel.Height = this.Height - (adPanel.Margin.Top + adPanel.Margin.Bottom);
 
             int transactionPanelPadding = transactionPanel.Margin.Right + transactionPanel.Margin.Left;
@@ -90,26 +103,19 @@ namespace cc105_pose_proj.Forms
             transactionPanel.Left = adPanel.Right + adPanel.Margin.Right + transactionPanel.Margin.Left;
             transactionPanel.Height = this.Height - (transactionPanel.Margin.Top + transactionPanel.Margin.Bottom);
 
-
-            
+            UpdateLayout();
 
             int totalsPanelTop = totalsPanel.Padding.Top;
             foreach(Panel rowPanel in totalsPanel.Controls.OfType<Panel>().OrderBy(r => r.TabIndex))
             {
-                var label1 = rowPanel.Controls.OfType<Label>().FirstOrDefault();
-                var label2 = rowPanel.Controls.OfType<Label>().LastOrDefault();
-
-                if (label1 == null || label2 == null) continue;
+                var labels = rowPanel.Controls.OfType<Label>().ToList();
+                if (labels.Count == 0) continue;
 
                 rowPanel.Top = totalsPanelTop;
-                rowPanel.Height = Math.Max(label1.Height, label2.Height);
+                rowPanel.Height = labels.Max(l => l.Height);
                 rowPanel.Width = totalsPanel.Width;
 
-                label1.Top = 0;
-                label1.Left = rowPanel.Padding.Left;
-
-                label2.Top = 0;
-                label2.Left = rowPanel.Right - rowPanel.Padding.Right - label2.Width;
+                LayoutUtil.FitTotalLabel(labels);
 
                 totalsPanelTop += rowPanel.Height;
             }

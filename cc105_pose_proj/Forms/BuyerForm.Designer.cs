@@ -75,6 +75,7 @@
             // 
             adPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             adPanel.BackColor = Color.Transparent;
+            adPanel.Image = (Image)resources.GetObject("adPanel.Image");
             adPanel.Location = new Point(0, 0);
             adPanel.Margin = new Padding(30, 30, 15, 30);
             adPanel.Name = "adPanel";
