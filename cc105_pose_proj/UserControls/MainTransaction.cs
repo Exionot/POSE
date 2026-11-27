@@ -28,7 +28,8 @@ namespace cc105_pose_proj
                 INavigator nav,
                 IProductService productService,
                 IDiscountService discountService,
-                IDialogService dialogService)
+                IDialogService dialogService,
+                ITransactionStateService transactionStateService)
         {
             InitializeComponent();
             SetupGridColumns();
@@ -38,7 +39,8 @@ namespace cc105_pose_proj
                 nav,
                 productService,
                 discountService,
-                dialogService);
+                dialogService,
+                transactionStateService);
 
             removeOneBtn.Click += (_, _) => RemoveOneRequest?.Invoke(this, EventArgs.Empty);
             removeAllBtn.Click += (_, _) => RemoveAllRequest?.Invoke(this, EventArgs.Empty);

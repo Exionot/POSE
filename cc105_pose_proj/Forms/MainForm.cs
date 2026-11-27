@@ -1,6 +1,6 @@
 ﻿using cc105_pose_proj.Util;
 
-namespace cc105_pose_proj
+namespace cc105_pose_proj.Forms
 {
     using cc105_pose_proj.Navigation;
     using cc105_pose_proj.UserControls;
@@ -10,16 +10,18 @@ namespace cc105_pose_proj
     public partial class MainForm : Form, INavigator
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly Form buyerForm = null!;
+        private readonly BuyerForm _buyerForm;
 
         public MainForm(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             InitializeComponent();
-            buyerForm = new Form1();
-            buyerForm.Show();
+
+            _buyerForm = _serviceProvider.GetRequiredService<BuyerForm>();
+            _buyerForm.Show();
+
             if (DisplayUtil.hasMultipleDisplay())
-                DisplayUtil.changeScreen(buyerForm, Screen.AllScreens[1]);
+                DisplayUtil.changeScreen(_buyerForm, Screen.AllScreens[1]);
             SystemEvents.DisplaySettingsChanged += NewDisplayListener;
         }
 
@@ -49,12 +51,21 @@ namespace cc105_pose_proj
             NavigateTo<Login>();
         }
 
-        private void NewDisplayListener(object sender, EventArgs e)
+        private void NewDisplayListener(object? sender, EventArgs e)
         {
             if (DisplayUtil.hasMultipleDisplay()) 
-                DisplayUtil.changeScreen(buyerForm, Screen.AllScreens[1]);
+                DisplayUtil.changeScreen(_buyerForm, Screen.AllScreens[1]);
             else 
-                DisplayUtil.changeScreen(buyerForm, Screen.PrimaryScreen!);
+                DisplayUtil.changeScreen(_buyerForm, Screen.PrimaryScreen!);
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            SystemEvents.DisplaySettingsChanged -= NewDisplayListener;
+            if (!_buyerForm.IsDisposed)
+                _buyerForm.Close();
+
+            base.OnFormClosed(e);
         }
     }
 }

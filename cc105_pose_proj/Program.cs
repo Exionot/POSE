@@ -78,7 +78,9 @@ namespace cc105_pose_proj
         private static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<ITransactionStateService, TransactionStateService>();
             services.AddSingleton<PricingService>();
+            services.AddSingleton<BuyerForm>();
 
             services.AddScoped<IRepository<Product>, ProductRepository>();
             services.AddScoped<IRepository<Discount>, DiscountRepository>();

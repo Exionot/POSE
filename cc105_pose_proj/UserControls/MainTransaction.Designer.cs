@@ -119,6 +119,7 @@
             transactionGrid.AllowUserToResizeRows = false;
             transactionGrid.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             transactionGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            transactionGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             transactionGrid.BorderStyle = BorderStyle.None;
             transactionGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             transactionGrid.Location = new Point(0, -88);
@@ -130,15 +131,21 @@
             transactionGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             transactionGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             transactionGrid.Size = new Size(654, 398);
-            transactionGrid.StateCommon.Background.Color1 = SystemColors.ControlDark;
+            transactionGrid.StateCommon.Background.Color1 = SystemColors.Control;
             transactionGrid.StateCommon.BackStyle = Krypton.Toolkit.PaletteBackStyle.GridBackgroundList;
+            transactionGrid.StateCommon.DataCell.Back.Color1 = SystemColors.Control;
+            transactionGrid.StateCommon.DataCell.Border.Color1 = SystemColors.ActiveBorder;
+            transactionGrid.StateCommon.DataCell.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom;
             transactionGrid.StateCommon.DataCell.Content.Font = new Font("Inter", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            transactionGrid.StateCommon.DataCell.Content.Padding = new Padding(5);
             transactionGrid.StateCommon.HeaderColumn.Back.Color1 = Color.Goldenrod;
             transactionGrid.StateCommon.HeaderColumn.Back.Color2 = Color.Goldenrod;
+            transactionGrid.StateCommon.HeaderColumn.Border.DrawBorders = Krypton.Toolkit.PaletteDrawBorders.None;
             transactionGrid.StateCommon.HeaderColumn.Content.Color1 = SystemColors.Control;
             transactionGrid.StateCommon.HeaderColumn.Content.Font = new Font("Inter", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             transactionGrid.StateCommon.HeaderRow.Back.Color1 = SystemColors.Control;
             transactionGrid.StateCommon.HeaderRow.Back.Color2 = SystemColors.Control;
+            transactionGrid.StateSelected.DataCell.Back.Color1 = Color.Wheat;
             transactionGrid.TabIndex = 0;
             // 
             // totalPanel

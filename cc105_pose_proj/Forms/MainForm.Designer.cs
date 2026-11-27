@@ -1,4 +1,4 @@
-﻿namespace cc105_pose_proj
+﻿namespace cc105_pose_proj.Forms
 {
     partial class MainForm
     {

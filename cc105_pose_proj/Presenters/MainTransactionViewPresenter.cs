@@ -16,6 +16,7 @@ namespace cc105_pose_proj.Presenters
         private readonly IDiscountService _discountService;
         private readonly IDialogService _dialogService;
         private readonly PricingService _pricingService;
+        private readonly ITransactionStateService _transactionState;
 
         private List<Discount> _activeDiscounts = [];
         private List<Product> _products = [];
@@ -27,6 +28,7 @@ namespace cc105_pose_proj.Presenters
                 IProductService productService,
                 IDiscountService discountService,
                 IDialogService dialogService,
+                ITransactionStateService transactionStateService,
                 PricingService? pricingService = null)
         {
             _view = view;
@@ -34,6 +36,7 @@ namespace cc105_pose_proj.Presenters
             _productService = productService;
             _discountService = discountService;
             _dialogService = dialogService;
+            _transactionState = transactionStateService;
             _pricingService = pricingService ?? new PricingService();
 
             _view.ProductSelected += ProductSelected;
@@ -42,6 +45,7 @@ namespace cc105_pose_proj.Presenters
             _view.ClearCartRequest += ClearCartRequest;
             _view.BackRequest += BackRequest;
 
+            _transactionState.StartTransaction();
             LoadData();
         }
 
@@ -133,6 +137,7 @@ namespace cc105_pose_proj.Presenters
                     return;
             }
 
+            _transactionState.EndTransaction();
             _nav.NavigateTo<Home>();
         }
 
@@ -144,6 +149,8 @@ namespace cc105_pose_proj.Presenters
             _view.Subtotal = summary.Subtotal.ToString("C2");
             _view.TotalSaved = summary.TotalSaved > 0 ? $"-{summary.TotalSaved:C2}" : "₱0.00";
             _view.GrandTotal = summary.GrandTotal.ToString("C2");
+
+            _transactionState.UpdateSale(summary);
 
             foreach (var product in _products)
             {
